@@ -80,3 +80,17 @@ fun month_range(d1: int, d2: int) =
     if d1 > d2
     then []
     else what_month(d1)::month_range(d1 + 1, d2)
+
+fun oldest(dates: (int * int * int) list) =
+    let fun old(dates: (int * int * int) list, oldest: int * int * int) =
+            if null dates
+            then oldest
+            else let val current_oldest = if is_older(oldest, hd dates) then oldest else hd dates
+                 in 
+                    old(tl dates, current_oldest)
+                 end
+    in
+        if null dates
+        then NONE
+        else SOME (old(tl dates, hd dates))
+    end
