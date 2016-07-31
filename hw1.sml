@@ -1,36 +1,42 @@
+(* Helper functions. We use #n very often, so it's reasonable to abstract those things.*)
+fun year(date: int * int * int) = #1 date
+fun month(date: int * int * int) = #2 date
+fun day(date: int * int * int) = #3 date
+
+
 (* Takes two dates and evaluates to true or false.  *)
 fun is_older(date1: int * int * int, 
              date2: int * int * int) =
-  (#1 date1 < #1 date2) 
+  (year date1 < year date2) 
   orelse 
-  (#1 date1 = #1 date2 andalso #2 date1 < #2 date2)
+  (year date1 = year date2 andalso month date1 < month date2)
   orelse
-  (#1 date1 = #1 date2 andalso #2 date1 = #2 date1 andalso #3 date1 < #3 date2)
+  (year date1 = year date2 andalso month date1 = month date1 andalso day date1 < day date2)
 
-
-fun number_in_month(dates: (int * int * int) list, month: int) =
+(* Takes a date and a month number and return number of dates in that month. *)
+fun number_in_month(dates: (int * int * int) list, month_number: int) =
     if null dates
     then 0
-    else if #2 (hd dates) = month
-         then 1 + number_in_month(tl dates, month)
-         else number_in_month(tl dates, month)
+    else if month (hd dates) = month_number
+         then 1 + number_in_month(tl dates, month_number)
+         else number_in_month(tl dates, month_number)
 
-
+(* Takes a date and a list of months's numbers and return number of dates in those months. *)
 fun number_in_months(dates: (int * int * int) list, months: int list) =
     if null months
     then 0
     else number_in_month(dates, hd months) + number_in_months(dates, tl months)
 
-
-fun dates_in_month(dates: (int * int * int) list, month: int) =
+(* Takes a list of dates and a month number and returns dates in that month. *)
+fun dates_in_month(dates: (int * int * int) list, month_number: int) =
     if null dates
     then []
     else let val date = hd dates
              val others = tl dates
          in 
-            if #2 date = month
-            then date::dates_in_month(others, month)
-            else dates_in_month(others, month)
+            if month date = month_number
+            then date::dates_in_month(others, month_number)
+            else dates_in_month(others, month_number)
          end
 
 
@@ -50,8 +56,15 @@ fun date_to_string(date: (int * int * int)) =
     let val months = ["January", "February", "March", "April", "May", "June", 
                       "July", "August", "September", "October", "November", "December"]
         val month_string = get_nth(months, #2 date)
-        val day_string = Int.toString (#3 date)
-        val year_string = Int.toString (#1 date)
     in 
-        month_string ^ " " ^ day_string ^ ", " ^ year_string
+        month_string ^ " " ^ Int.toString (#3 date) ^ ", " ^ Int.toString (#1 date)
+    end
+
+fun number_before_reaching_sum(sum: int, numbers: int list) =
+    let fun reach(numbers: int list, index: int, acc: int) =
+            if acc + hd numbers >= sum
+            then index
+            else reach(tl numbers, index + 1, acc + hd numbers)
+    in
+        reach(numbers, 0, 0)
     end
