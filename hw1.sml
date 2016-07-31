@@ -118,17 +118,17 @@ fun unique(l: int list) =
             else if hd l = el
                  then true
                  else in_list(el, tl l)
-
-        fun remove(l: int list, acc: int list) =
-            if null l
-            then acc
-            else if in_list(hd l, acc)
-                 then remove(tl l, acc)
-                 else remove(tl l, (hd l)::acc)
     in
-        remove(l, [])
+        if null l
+        then []
+        else if in_list(hd l, tl l)
+             then unique(tl l)
+             else (hd l)::unique(tl l)
     end
 
 fun number_in_months_challenge(dates: (int * int * int) list, months: int list) =
     number_in_months(dates, unique months)
 
+
+fun dates_in_months_challenge(dates: (int * int * int) list, months: int list) =
+    dates_in_months(dates, unique months)
