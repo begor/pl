@@ -75,3 +75,8 @@ fun what_month(day: int) =
     in
         number_before_reaching_sum(day, months) + 1
     end
+
+fun month_range(d1: int, d2: int) =
+    if d1 > d2
+    then []
+    else what_month(d1)::month_range(d1 + 1, d2)
