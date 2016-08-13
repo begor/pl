@@ -21,6 +21,14 @@ fun all_except_option(str, lst) =
         if filtered_list = lst then NONE else SOME filtered_list
     end
 
+(* b *)
+fun get_substitutions1(subs, str) = 
+    case subs of
+        [] => []
+        | x::xs => case all_except_option(str, x) of
+                        NONE => get_substitutions1(xs, str)
+                        | SOME i => i @ get_substitutions1(xs, str) 
+
 (* you may assume that Num is always used with values 2, 3, ..., 10
    though it will not really come up *)
 datatype suit = Clubs | Diamonds | Hearts | Spades
