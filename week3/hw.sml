@@ -41,6 +41,18 @@ fun get_substitutions2(subs, str) =
         aux(subs, [])
     end
 
+(* d *)
+fun similar_names(subs, name) = 
+    let val {first=first, last=last, middle=middle} = name
+
+        fun get_similars(names) =
+            case names of
+                [] => []
+                | x::xs => {first=x, last=last, middle=middle}::get_similars(xs)
+    in
+        name::get_similars(get_substitutions2 (subs, first))
+    end
+
 (* you may assume that Num is always used with values 2, 3, ..., 10
    though it will not really come up *)
 datatype suit = Clubs | Diamonds | Hearts | Spades
