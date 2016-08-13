@@ -10,3 +10,8 @@ val t1a3 = all_except_option ("string", ["bar", "string", "foo"]) = SOME ["bar",
 val t1b1 = get_substitutions1 ([["foo"],["there"]], "foo") = []
 val t1b2 = get_substitutions1 ([["foo", "yep"],["there"]], "foo") = ["yep"]
 val t1b3 = get_substitutions1 ([["foo", "there"],["there", "foo"]], "foo") = ["there", "there"]
+
+(* 1c *)
+val t1c1 = get_substitutions2 ([["foo"],["there"]], "foo") = []
+val t1c2 = get_substitutions2 ([["foo", "yep"],["there"]], "foo") = ["yep"]
+val t1c3 = get_substitutions2 ([["foo", "there"],["there", "foo"]], "foo") = ["there", "there"]

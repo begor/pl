@@ -27,7 +27,19 @@ fun get_substitutions1(subs, str) =
         [] => []
         | x::xs => case all_except_option(str, x) of
                         NONE => get_substitutions1(xs, str)
-                        | SOME i => i @ get_substitutions1(xs, str) 
+                        | SOME i => get_substitutions1(xs, str) @ i
+
+(* c *)
+fun get_substitutions2(subs, str) = 
+    let fun aux(subs, acc) =
+            case subs of
+                [] => acc
+                | x::xs => case all_except_option(str, x) of
+                                NONE => aux(xs, acc)
+                                | SOME i => aux(xs, acc @ i)
+    in 
+        aux(subs, [])
+    end
 
 (* you may assume that Num is always used with values 2, 3, ..., 10
    though it will not really come up *)
