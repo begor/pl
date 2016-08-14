@@ -111,8 +111,24 @@ fun sum_cards cs =
 (* f *)
 fun score (cs, goal) =
     let val sum = sum_cards cs
+        val pre_score = if sum > goal
+                        then 3 * (sum - goal)
+                        else goal - sum
     in
-        if sum > goal
-        then 3 * (sum - goal) div (if all_same_color cs then 2 else 1)
-        else goal - sum
+        pre_score div (if all_same_color cs then 2 else 1)
+    end
+
+(* g *)
+fun officiate (cards, moves, goal) =
+    let fun run_game (cards, held, moves_left) = 
+            case moves_left of
+                [] => score(held, goal)
+                | (Discard c)::ms => run_game(cards, remove_card(held, c, IllegalMove), ms)
+                | (Draw)::ms => case cards of 
+                                    [] => score(held, goal)
+                                    | c::cs => if (sum_cards held) + (card_value c) > goal
+                                               then score(c::held, goal)
+                                               else run_game(cs, c::held, ms)
+    in
+        run_game(cards, [], moves)
     end
