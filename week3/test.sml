@@ -33,3 +33,8 @@ val t2b3 = card_value (Clubs, Queen) = 10
 val t2c1 = remove_card ([(Hearts, Ace)], (Hearts, Ace), IllegalMove) = []
 val t2c2 = remove_card ([(Hearts, Ace), (Clubs, Queen)], (Hearts, Ace), IllegalMove) = [(Clubs, Queen)]
 val t2c3 = remove_card ([(Hearts, Ace), (Clubs, Queen), (Hearts, Ace)], (Hearts, Ace), IllegalMove) = [(Clubs, Queen), (Hearts, Ace)]
+
+(* 2d *)
+val t2d1 = all_same_color [(Hearts, Ace), (Hearts, Ace)] = true
+val t2d2 = all_same_color [(Hearts, Ace), (Diamonds, Ace)] = true
+val t2d3 = all_same_color [(Hearts, Ace), (Clubs, Ace)] = false
