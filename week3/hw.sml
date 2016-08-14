@@ -79,3 +79,11 @@ fun card_value card =
         (_, Num i) => i
         | (_, Ace) => 11
         | _ => 10 
+
+(* c *)
+fun remove_card (cs, c, e) =
+    case cs of
+        [] => raise e
+        | x::xs => if x = c
+                   then xs
+                   else x::remove_card(xs, c, e) 

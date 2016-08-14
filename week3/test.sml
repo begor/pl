@@ -20,8 +20,16 @@ val t1c3 = get_substitutions2 ([["foo", "there"],["there", "foo"]], "foo") = ["t
 val test4 = similar_names ([["Fred","Fredrick"],["Elizabeth","Betty"],["Freddie","Fred","F"]], {first="Fred", middle="W", last="Smith"}) =
         [{first="Fred", last="Smith", middle="W"}, {first="Fredrick", last="Smith", middle="W"},
          {first="Freddie", last="Smith", middle="W"}, {first="F", last="Smith", middle="W"}]
+(* 2a *)
+val t2a1 = card_color (Clubs, Num 2) = Black
+val t2a2 = card_color (Hearts, Ace) = Red
 
-val test5 = card_color (Clubs, Num 2) = Black
-val test6 = card_value (Clubs, Num 2) = 2
-val test61 = card_value (Clubs, Ace) = 11
-val test62 = card_value (Clubs, Queen) = 10
+(* 2b *)
+val t2b1 = card_value (Clubs, Num 2) = 2
+val t2b2 = card_value (Clubs, Ace) = 11
+val t2b3 = card_value (Clubs, Queen) = 10
+
+(* 2c *)
+val t2c1 = remove_card ([(Hearts, Ace)], (Hearts, Ace), IllegalMove) = []
+val t2c2 = remove_card ([(Hearts, Ace), (Clubs, Queen)], (Hearts, Ace), IllegalMove) = [(Clubs, Queen)]
+val t2c3 = remove_card ([(Hearts, Ace), (Clubs, Queen), (Hearts, Ace)], (Hearts, Ace), IllegalMove) = [(Clubs, Queen), (Hearts, Ace)]
