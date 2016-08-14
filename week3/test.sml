@@ -38,3 +38,8 @@ val t2c3 = remove_card ([(Hearts, Ace), (Clubs, Queen), (Hearts, Ace)], (Hearts,
 val t2d1 = all_same_color [(Hearts, Ace), (Hearts, Ace)] = true
 val t2d2 = all_same_color [(Hearts, Ace), (Diamonds, Ace)] = true
 val t2d3 = all_same_color [(Hearts, Ace), (Clubs, Ace)] = false
+
+(* 2e *)
+val t2e1 = sum_cards [(Clubs, Num 2),(Clubs, Num 2)] = 4
+val t2e2 = sum_cards [(Clubs, Num 2),(Clubs, Ace)] = 13
+val t2e3 = sum_cards [(Clubs, Queen),(Clubs, Num 1)] = 11

@@ -97,3 +97,13 @@ fun all_same_color cs =
         | x::y::ys => if card_color x = card_color y
                       then all_same_color (y::ys)
                       else false
+
+(* e *)
+fun sum_cards cs =
+    let fun aux (cs, acc) = 
+            case cs of
+                [] => acc
+                | x::xs => aux(xs, acc + card_value x)
+    in 
+        aux(cs, 0)
+    end
