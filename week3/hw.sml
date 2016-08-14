@@ -71,5 +71,11 @@ fun card_color card =
     case card of
         (Spades, _) => Black
         | (Clubs, _) => Black
-        | (Diamonds, _) => Red
-        | (Hearts, _) => Red
+        | _ => Red
+
+(* b *)
+fun card_value card =
+    case card of
+        (_, Num i) => i
+        | (_, Ace) => 11
+        | _ => 10 

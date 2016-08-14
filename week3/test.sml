@@ -22,3 +22,6 @@ val test4 = similar_names ([["Fred","Fredrick"],["Elizabeth","Betty"],["Freddie"
          {first="Freddie", last="Smith", middle="W"}, {first="F", last="Smith", middle="W"}]
 
 val test5 = card_color (Clubs, Num 2) = Black
+val test6 = card_value (Clubs, Num 2) = 2
+val test61 = card_value (Clubs, Ace) = 11
+val test62 = card_value (Clubs, Queen) = 10
