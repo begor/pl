@@ -43,3 +43,9 @@ val t2d3 = all_same_color [(Hearts, Ace), (Clubs, Ace)] = false
 val t2e1 = sum_cards [(Clubs, Num 2),(Clubs, Num 2)] = 4
 val t2e2 = sum_cards [(Clubs, Num 2),(Clubs, Ace)] = 13
 val t2e3 = sum_cards [(Clubs, Queen),(Clubs, Num 1)] = 11
+
+(* 2f *)
+
+val t2f1 = score ([(Hearts, Num 2),(Clubs, Num 4)],10) = 4
+val t2f2 = score ([(Hearts, Num 8),(Clubs, Num 4)],10) = 6
+val t2f3 = score ([(Spades, Num 8),(Clubs, Num 4)],10) = 3

@@ -107,3 +107,12 @@ fun sum_cards cs =
     in 
         aux(cs, 0)
     end
+
+(* f *)
+fun score (cs, goal) =
+    let val sum = sum_cards cs
+    in
+        if sum > goal
+        then 3 * (sum - goal) div (if all_same_color cs then 2 else 1)
+        else goal - sum
+    end
