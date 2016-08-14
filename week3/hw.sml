@@ -1,12 +1,7 @@
-(* Dan Grossman, Coursera PL, HW2 Provided Code *)
-
-(* if you use this function to compare two strings (returns true if the same
-   string), then you avoid several of the functions in problem 1 having
-   polymorphic types that may be confusing *)
 fun same_string(s1 : string, s2 : string) =
     s1 = s2
 
-(* put your solutions for problem 1 here *)
+(* Problem 1 *)
 
 (* a *)
 fun all_except_option(str, lst) = 
@@ -31,20 +26,19 @@ fun get_substitutions1(subs, str) =
 
 (* c *)
 fun get_substitutions2(subs, str) = 
-    let fun aux(subs, acc) =
+    let fun substitute(subs, acc) =
             case subs of
                 [] => acc
                 | x::xs => case all_except_option(str, x) of
-                                NONE => aux(xs, acc)
-                                | SOME i => aux(xs, acc @ i)
+                                NONE => substitute(xs, acc)
+                                | SOME i => substitute(xs, acc @ i)
     in 
-        aux(subs, [])
+        substitute(subs, [])
     end
 
 (* d *)
 fun similar_names(subs, name) = 
     let val {first=first, last=last, middle=middle} = name
-
         fun get_similars(names) =
             case names of
                 [] => []
@@ -64,14 +58,14 @@ datatype move = Discard of card | Draw
 
 exception IllegalMove
 
-(* put your solutions for problem 2 here *)
+(* Problem 2 *)
 
 (* a *)
 fun card_color card =
     case card of
         (Spades, _) => Black
         | (Clubs, _) => Black
-        | _ => Red
+        | _ => Red  (* We can also check exactly Hearts & Diamonds *)
 
 (* b *)
 fun card_value card =
@@ -100,12 +94,12 @@ fun all_same_color cs =
 
 (* e *)
 fun sum_cards cs =
-    let fun aux (cs, acc) = 
+    let fun sum (cs, acc) = 
             case cs of
                 [] => acc
-                | x::xs => aux(xs, acc + card_value x)
+                | x::xs => sum(xs, acc + card_value x)
     in 
-        aux(cs, 0)
+        sum(cs, 0)
     end
 
 (* f *)
