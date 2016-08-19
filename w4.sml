@@ -22,3 +22,17 @@ fun fold (f, acc, xs) =
 val sum_a = fold(fn (x, y) => x + y, 0, a)
 val not_all_even = fold(fn (x, y) => x andalso y mod 2 = 0, true, a)
 val all_even = fold(fn (x, y) => x andalso y mod 2 = 0, true, a_even)
+
+(* map and filter in terms of fold *)
+fun map1 (f, xs) = fold(fn (xs, x) => (f x)::xs, [], xs)
+
+val a_sqr1 = map(fn x => x * x, a)
+
+fun filter1 (f, xs) = 
+	let
+		fun filter_and_append (xs, x) = if f x then x::xs else xs
+	in
+		fold(filter_and_append, [], xs)
+	end
+
+val a_even1 = filter(fn x => x mod 2 = 0, a)
