@@ -56,9 +56,11 @@ val xs_bigger_two_and_even = even_greater_two xs
 
 
 (* currying *)
-fun sorted (x, y, z) = z >= y andalso y >= x
+fun sorted_tupled (x, y, z) = z >= y andalso y >= x
 val sorted_curried = fn x => fn y => fn z => z >= y andalso y >= x
 
-val a_tuple = (2, 4, 6)
-val sorted_tuple = sorted a_tuple
-val sorted_tuple_c = ((sorted_curried 2) 4) 6 (* equivalent *)
+val s1 = sorted_tupled (2, 4, 6)
+val s2 = sorted_curried 2 4 6 (* equivalent *)
+
+fun sorted x y z = z >= y andalso y >= x (* also equivalent, more syntactic sugared *)
+val s3 = sorted 2 4 6
