@@ -76,3 +76,47 @@ fun fold_c f acc xs =
 fun sum_list xs = fold_c (fn (x, y) => x + y) 0 xs
 
 val four = sum_list [1, 1, 2]
+
+(* partial application *)
+val non_negative = sorted 0 0
+val t = non_negative 4
+
+val sum = fold_c (fn (x, y) => x + y) 0
+val five = sum [1, 1, 2, 1]
+
+(* curry tupled functions *)
+fun curry f x y = f (x, y)
+
+(* make curried funciton tupled *)
+fun uncurry f (x, y) = f x y
+
+(* reverse curried arguments *)
+fun other_curry f x y = f y x
+
+(* callbacks *)
+(* library *)
+val callbacks : (int -> unit) list ref = ref []
+
+fun onKeyEvent f = callbacks := f :: (!callbacks)
+
+fun onEvent i =
+	let fun loop fs =
+			case fs of 
+				[] => ()
+				| f::fs' => (f i; loop fs')
+	in loop (!callbacks) end
+
+(* clients *)
+val times = ref 0
+val _ = onKeyEvent (fn _ => times := (!times) + 1) (* count pressing the keys *)
+
+fun printIfPressed i = onKeyEvent (fn j => if i = j 
+										   then print ("pressed " ^ Int.toString i ^ "\n")
+										   else ())
+
+val _ = printIfPressed 42
+
+val _ = onEvent 42
+val _ = onEvent 42
+val _ = onEvent 42
+val three = !times
