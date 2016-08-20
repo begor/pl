@@ -62,5 +62,17 @@ val sorted_curried = fn x => fn y => fn z => z >= y andalso y >= x
 val s1 = sorted_tupled (2, 4, 6)
 val s2 = sorted_curried 2 4 6 (* equivalent *)
 
-fun sorted x y z = z >= y andalso y >= x (* also equivalent, more syntactic sugared *)
+(* also equivalent, syntactic sugar for sorted_curried *)
+fun sorted x y z = z >= y andalso y >= x
 val s3 = sorted 2 4 6
+
+
+fun fold_c f acc xs =
+	case xs of 
+		[] => acc
+		| x::xs' => fold_c f (f(acc, x)) xs'
+
+
+fun sum_list xs = fold_c (fn (x, y) => x + y) 0 xs
+
+val four = sum_list [1, 1, 2]
