@@ -53,3 +53,12 @@ fun even_greater_two xs = xs |> even_only |> greater_two
 
 val xs = [1, 2, 3, 4, 5, 6, 7, 8]
 val xs_bigger_two_and_even = even_greater_two xs
+
+
+(* currying *)
+fun sorted (x, y, z) = z >= y andalso y >= x
+val sorted_curried = fn x => fn y => fn z => z >= y andalso y >= x
+
+val a_tuple = (2, 4, 6)
+val sorted_tuple = sorted a_tuple
+val sorted_tuple_c = ((sorted_curried 2) 4) 6 (* equivalent *)
