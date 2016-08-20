@@ -36,3 +36,20 @@ fun filter1 (f, xs) =
 	end
 
 val a_even1 = filter(fn x => x mod 2 = 0, a)
+
+fun mul_two x = x * 2
+fun sqr x = x * x
+
+val mul_two_squared = map(mul_two o sqr, a)
+
+(* infix combination *)
+infix |>
+fun x |> f = f x
+
+fun even_only xs = filter(fn x => x mod 2 = 0, xs)
+fun greater_two xs = filter(fn x => x > 2, xs)
+
+fun even_greater_two xs = xs |> even_only |> greater_two
+
+val xs = [1, 2, 3, 4, 5, 6, 7, 8]
+val xs_bigger_two_and_even = even_greater_two xs
