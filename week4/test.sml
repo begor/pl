@@ -14,3 +14,8 @@ val t23 = longest_string1 ["aA","bc","C"] = "aA"
 val t31 = longest_string2 ["A","bc","C"] = "bc"
 val t32 = longest_string2 [] = ""
 val t33 = longest_string2 ["aA","bc","C"] = "bc"
+
+(* 4 *)
+val t41 = longest_string3 ["A","bc","C"] = "bc"
+val t42 = longest_string3 [] = ""
+val t43 = longest_string3 ["aA","bc","C"] = "aA"

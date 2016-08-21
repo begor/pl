@@ -59,3 +59,7 @@ fun longest_string2 xs =
 	in 
 		List.foldl longer "" xs 
 	end
+
+(* 4 *)
+fun longest_string_helper f xs = List.foldl f "" xs 
+val longest_string3 = longest_string_helper (fn (x, y) => if String.size x > String.size y then x else y)
