@@ -37,3 +37,10 @@ val t63 = rev_string "aBc" = "cBa"
 val t71 = first_answer (fn x => if x > 3 then SOME x else NONE) [1,2,3,4,5] = 4
 val t72 = first_answer (fn x => if x > 4 then SOME x else NONE) [1,2,3,4,5] = 5
 val t73 = ((first_answer (fn x => if x > 6 then SOME x else NONE) [1,2,3,4,5]); false) handle NoAnswer => true
+
+(* 8 *)
+val t81 = all_answers (fn x => if x = 1 then SOME [x] else NONE) [2,3,4,5,6,7] = NONE
+val t82 = all_answers (fn x => if x < 8 then SOME [x] else NONE) [2,3,4,5,6,7] = SOME [2,3,4,5,6,7]
+val t83 = all_answers (fn x => if x < 8 then SOME [x * 2] else NONE) [2,3,4,5,6,7] = SOME [4,6,8,10,12,14]
+val t84 = all_answers (fn x => if x < 5 then SOME [x] else NONE) [2,3,4,5,6,7] = NONE
+val t85 = all_answers (fn x => if x = 1 then SOME [x] else NONE) [] = SOME []

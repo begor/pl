@@ -37,6 +37,7 @@ datatype typ = Anything
 (* 1 *)
 fun only_capitals xs =
 	let 
+		(* it's a little bit readable *)
 		fun is_capital w = Char.isUpper(String.sub(w, 0))
 	in
 		List.filter is_capital xs
@@ -72,7 +73,7 @@ val longest_string3 = longest_string_helper (fn (x, y) => x > y)
 val longest_string4 = longest_string_helper (fn (x, y) => x >= y)
 
 (* 5 *)
-val longest_capitalized = (longest_string1 o only_capitals)
+val longest_capitalized = longest_string1 o only_capitals
 
 (* 6 *)
 val rev_string = String.implode o rev o String.explode
@@ -84,6 +85,19 @@ fun first_answer f xs =
 												| NONE => false)
 									(List.map f xs)
 	in case filtered of
-			(SOME x)::xs' => x
+			(SOME x)::_ => x
 			| [] => raise NoAnswer
 	end 
+
+
+(* 8 *)
+fun all_answers f xs =
+	let fun foldit(x, acc) =
+			case acc of
+				NONE => NONE
+				| SOME xs => case x of
+					 			SOME i => SOME (xs @ i)
+					 			| NONE => NONE
+	in 
+		List.foldl foldit (SOME []) (List.map f xs)
+	end
