@@ -22,3 +22,8 @@ val t43 = longest_string3 ["aA","bc","C"] = "aA"
 val t44 = longest_string4 ["A","bc","C"] = "bc"
 val t45 = longest_string4 [] = ""
 val t46 = longest_string4 ["aA","bc","C"] = "bc"
+
+(* 5 *)
+val t51 = longest_capitalized ["A","bc","C"] = "A"
+val t52 = longest_capitalized ["A","Bc","C"] = "Bc"
+val t53 = longest_capitalized ["a","bc","cC"] = ""
