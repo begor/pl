@@ -49,3 +49,8 @@ val t85 = all_answers (fn x => if x = 1 then SOME [x] else NONE) [] = SOME []
 val t9a1 = count_wildcards Wildcard = 1
 val t9a2 = count_wildcards (TupleP [Wildcard, Wildcard, UnitP]) = 2
 val t9a3 = count_wildcards UnitP = 0
+
+val t9b1 = count_wild_and_variable_lengths (Variable("a")) = 1
+val t9b2 = count_wild_and_variable_lengths Wildcard = 1
+val t9b3 = count_wild_and_variable_lengths (Variable("abc")) = 3
+val t9b4 = count_wild_and_variable_lengths (TupleP [Variable("ab"), Wildcard, UnitP]) = 3
