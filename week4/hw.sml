@@ -101,3 +101,7 @@ fun all_answers f xs =
 	in 
 		List.foldl foldit (SOME []) (List.map f xs)
 	end
+
+(* 9 *)
+fun count_wildcards p =
+	g (fn () => 1) (fn x => 0) p

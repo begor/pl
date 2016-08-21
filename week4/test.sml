@@ -44,3 +44,8 @@ val t82 = all_answers (fn x => if x < 8 then SOME [x] else NONE) [2,3,4,5,6,7] =
 val t83 = all_answers (fn x => if x < 8 then SOME [x * 2] else NONE) [2,3,4,5,6,7] = SOME [4,6,8,10,12,14]
 val t84 = all_answers (fn x => if x < 5 then SOME [x] else NONE) [2,3,4,5,6,7] = NONE
 val t85 = all_answers (fn x => if x = 1 then SOME [x] else NONE) [] = SOME []
+
+(* 9 *)
+val t9a1 = count_wildcards Wildcard = 1
+val t9a2 = count_wildcards (TupleP [Wildcard, Wildcard, UnitP]) = 2
+val t9a3 = count_wildcards UnitP = 0
