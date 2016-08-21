@@ -78,3 +78,14 @@ val longest_capitalized = (longest_string1 o only_capitals)
 
 (* 6 *)
 val rev_string = String.implode o rev o String.explode
+
+(* 7 *)
+fun first_answer f xs =
+	let val filtered = List.filter (fn x => case x of 
+												SOME _ => true
+												| NONE => false)
+									(List.map f xs)
+	in case filtered of
+			(SOME x)::xs' => x
+			| [] => raise NoAnswer
+	end 

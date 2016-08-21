@@ -32,3 +32,8 @@ val t53 = longest_capitalized ["a","bc","cC"] = ""
 val t61 = rev_string "abc" = "cba"
 val t62 = rev_string "" = ""
 val t63 = rev_string "aBc" = "cBa"
+
+(* 7 *)
+val t71 = first_answer (fn x => if x > 3 then SOME x else NONE) [1,2,3,4,5] = 4
+val t72 = first_answer (fn x => if x > 4 then SOME x else NONE) [1,2,3,4,5] = 5
+val t73 = ((first_answer (fn x => if x > 6 then SOME x else NONE) [1,2,3,4,5]); false) handle NoAnswer => true
