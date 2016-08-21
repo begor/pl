@@ -1,12 +1,12 @@
 fun map (f, x) =
-	case x of
-		[] => []
-		| x::xs => (f x)::map(f, xs)
+    case x of
+        [] => []
+        | x::xs => (f x)::map(f, xs)
 
 fun filter (f, x) =
-	case x of 
-		[] => []
-		| x::xs => if f x then x::filter(f, xs) else filter(f, xs)
+    case x of 
+        [] => []
+        | x::xs => if f x then x::filter(f, xs) else filter(f, xs)
 
 
 val a = [1, 2, 3, 4, 5]
@@ -15,9 +15,9 @@ val a_even = filter(fn x => x mod 2 = 0, a)
 val a_odd = filter(fn x => x mod 2 <> 0, a)
 
 fun fold (f, acc, xs) =
-	case xs of 
-		[] => acc
-		| x::xs' => fold (f, f(acc, x), xs')
+    case xs of 
+        [] => acc
+        | x::xs' => fold (f, f(acc, x), xs')
 
 val sum_a = fold(fn (x, y) => x + y, 0, a)
 val not_all_even = fold(fn (x, y) => x andalso y mod 2 = 0, true, a)
@@ -29,11 +29,11 @@ fun map1 (f, xs) = fold(fn (xs, x) => (f x)::xs, [], xs)
 val a_sqr1 = map(fn x => x * x, a)
 
 fun filter1 (f, xs) = 
-	let
-		fun filter_and_append (xs, x) = if f x then x::xs else xs
-	in
-		fold(filter_and_append, [], xs)
-	end
+    let
+        fun filter_and_append (xs, x) = if f x then x::xs else xs
+    in
+        fold(filter_and_append, [], xs)
+    end
 
 val a_even1 = filter(fn x => x mod 2 = 0, a)
 
@@ -68,9 +68,9 @@ val s3 = sorted 2 4 6
 
 
 fun fold_c f acc xs =
-	case xs of 
-		[] => acc
-		| x::xs' => fold_c f (f(acc, x)) xs'
+    case xs of 
+        [] => acc
+        | x::xs' => fold_c f (f(acc, x)) xs'
 
 
 fun sum_list xs = fold_c (fn (x, y) => x + y) 0 xs
@@ -100,19 +100,19 @@ val callbacks : (int -> unit) list ref = ref []
 fun onKeyEvent f = callbacks := f :: (!callbacks)
 
 fun onEvent i =
-	let fun loop fs =
-			case fs of 
-				[] => ()
-				| f::fs' => (f i; loop fs')
-	in loop (!callbacks) end
+    let fun loop fs =
+            case fs of 
+                [] => ()
+                | f::fs' => (f i; loop fs')
+    in loop (!callbacks) end
 
 (* clients *)
 val times = ref 0
 val _ = onKeyEvent (fn _ => times := (!times) + 1) (* count pressing the keys *)
 
 fun printIfPressed i = onKeyEvent (fn j => if i = j 
-										   then print ("pressed " ^ Int.toString i ^ "\n")
-										   else ())
+                                           then print ("pressed " ^ Int.toString i ^ "\n")
+                                           else ())
 
 val _ = printIfPressed 42
 
@@ -120,3 +120,38 @@ val _ = onEvent 42
 val _ = onEvent 42
 val _ = onEvent 42
 val three = !times
+
+
+(* ADT *)
+datatype set = S of { insert : int -> set,
+                      member : int -> bool,
+                      size : unit -> int }
+
+
+val empty_set = 
+    let 
+        fun make xs = (* xs - private data, a container of a set which can't be modified elsewhere *)
+            let 
+                fun contains i = List.exists (fn j => j = i) xs
+            in 
+                S {insert = fn i => if contains i
+                                    then make xs
+                                    else make (i::xs),
+                   member = contains,
+                   size = fn () => length xs
+                   }
+            end
+    in
+        make []
+    end
+
+fun using () =
+    let val S s1 = empty_set
+        val S s2 = (#insert s1) 2 (* 2 *)
+        val S s3 = (#insert s2) 2 (* 2 *)
+        val S s4 = (#insert s3) 3 (* 2, 3 *)
+    in
+        if (# member s3) 2
+        then 42
+        else 0
+    end
