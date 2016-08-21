@@ -75,3 +75,6 @@ val longest_string4 = longest_string_helper (fn (x, y) => x >= y)
 
 (* 5 *)
 val longest_capitalized = (longest_string1 o only_capitals)
+
+(* 6 *)
+val rev_string = String.implode o rev o String.explode
