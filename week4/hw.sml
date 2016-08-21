@@ -36,32 +36,20 @@ datatype typ = Anything
 
 (* 1 *)
 fun only_capitals xs =
-	let 
-		(* it's a little bit readable *)
-		fun is_capital w = Char.isUpper(String.sub(w, 0))
-	in
-		List.filter is_capital xs
-	end
+	List.filter (fn w => Char.isUpper(String.sub(w, 0))) xs
 
 (* 2 *)
 fun longest_string1 xs =
-	let 
-		fun longer(x, y) = if String.size x > String.size y then x else y
-	in 
-		List.foldl longer "" xs 
-	end
+	List.foldl (fn (x, y) => if String.size x > String.size y then x else y) "" xs
 
 (* 3 *)
 fun longest_string2 xs =
-	let 
-		fun longer(x, y) = if String.size x >= String.size y then x else y
-	in 
-		List.foldl longer "" xs 
-	end
+	List.foldl (fn (x, y) => if String.size x >= String.size y then x else y) "" xs
 
 (* 4 *)
 fun longest_string_helper f xs = 
 	let 
+		(* it's more readable to put this in let-expression *)
 		fun longer (x, y) = if f(String.size x, String.size y)
 							then x
 							else y
@@ -112,12 +100,12 @@ fun count_some_var (s, p) = g (fn _ => 0) (fn x => if x = s then 1 else 0) p
 fun check_pat p = 
 	let fun get_vars p = 
 		case p of
-		  Variable x        => [x]
-		  | TupleP ps       => List.foldl (fn (x,acc) => x @ acc) [] (List.map get_vars ps)
-		  | _               => []
+		  Variable x  => [x]
+		  | TupleP ps => List.foldl (fn (x,acc) => x @ acc) [] (List.map get_vars ps)
+		  | _         => []
 		fun check xs =
 			case xs of
-				[] => true
+				[]       => true
 				| x::xs' => if not (List.exists (fn y => y = x) xs')
 							then check(xs')
 							else false
@@ -128,19 +116,19 @@ fun check_pat p =
 (* 11 *)
 fun match (v, p) =
 	case p of
-	    Wildcard   => SOME []
-	  | Variable x => SOME [(x, v)]
-	  | UnitP      => (case v of 
-	  					Unit => SOME []
-	  					| _ => NONE)
-	  | ConstP i   => (case v of
-	  					Const i1 => if i = i1 then SOME [] else NONE
-	  					| _ => NONE)
-	  | TupleP ps  => (case v of
-						Tuple ps' => if List.length ps = List.length ps'
-									 then all_answers (fn pair => match pair) (ListPair.zip(ps', ps))
-									 else NONE
-						| _ => NONE)
+	    Wildcard          => SOME []
+	  | Variable x        => SOME [(x, v)]
+	  | UnitP             => (case v of 
+			  					Unit => SOME []
+			  					| _ => NONE)
+	  | ConstP i          => (case v of
+			  					Const i' => if i = i' then SOME [] else NONE
+			  					| _ => NONE)
+	  | TupleP ps         => (case v of
+								Tuple ps' => if List.length ps = List.length ps'
+											 then all_answers (fn pair => match pair) (ListPair.zip(ps', ps))
+											 else NONE
+								| _ => NONE)
 	  | ConstructorP(s,p) => (case v of 
 	  							Constructor(s', v) => if s = s' 
 	  												  then match(v, p) 
