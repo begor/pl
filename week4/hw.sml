@@ -36,10 +36,18 @@ datatype typ = Anything
 
 (**** you can put all your code here ****)
 
-
+(* 1 *)
 fun only_capitals xs =
 	let 
 		fun is_capital w = Char.isUpper(String.sub(w, 0))
 	in
 		List.filter is_capital xs
+	end
+
+(* 2 *)
+fun longest_string1 xs =
+	let 
+		fun longer(x, y) = if String.size x > String.size y then x else y
+	in 
+		List.foldl longer "" xs 
 	end
