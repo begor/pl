@@ -124,3 +124,25 @@ fun check_pat p =
 	in 
 		check (get_vars p)
 	end
+
+(* 11 *)
+fun match (v, p) =
+	case p of
+	    Wildcard   => SOME []
+	  | Variable x => SOME [(x, v)]
+	  | UnitP      => (case v of 
+	  					Unit => SOME []
+	  					| _ => NONE)
+	  | ConstP i   => (case v of
+	  					Const i1 => if i = i1 then SOME [] else NONE
+	  					| _ => NONE)
+	  | TupleP ps  => (case v of
+						Tuple ps' => if List.length ps = List.length ps'
+									 then all_answers (fn pair => match pair) (ListPair.zip(ps', ps))
+									 else NONE
+						| _ => NONE)
+	  | ConstructorP(s,p) => (case v of 
+	  							Constructor(s', v) => if s = s' 
+	  												  then match(v, p) 
+	  												  else NONE
+	  							| _ => NONE)

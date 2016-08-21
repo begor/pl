@@ -65,3 +65,9 @@ val t101 = check_pat (Variable("x")) = true
 val t102 = check_pat (TupleP [Variable("x"), Variable("a"), UnitP]) = true
 val t103 = check_pat (TupleP [Variable("x"), Variable("a"), Variable("a")]) = false
 val t104 = check_pat UnitP = true
+
+(* 11 *)
+val t111 = match (Const(1), UnitP) = NONE
+val t112 = match (Const(1), ConstP(1)) = SOME []
+val t113 = match ((Tuple [Const(1), Const(3)]),
+				  (TupleP [Variable("x"), Variable("a")])) = SOME [("x", Const 1),("a", Const 3)]
