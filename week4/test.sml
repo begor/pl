@@ -54,3 +54,8 @@ val t9b1 = count_wild_and_variable_lengths (Variable("a")) = 1
 val t9b2 = count_wild_and_variable_lengths Wildcard = 1
 val t9b3 = count_wild_and_variable_lengths (Variable("abc")) = 3
 val t9b4 = count_wild_and_variable_lengths (TupleP [Variable("ab"), Wildcard, UnitP]) = 3
+
+val t9c1 = count_some_var ("x", Variable("x")) = 1
+val t9c2 = count_some_var ("x", Variable("a")) = 0
+val t9c3 = count_some_var ("x", (TupleP [Variable("x"), Variable("a"), UnitP])) = 1
+val t9c4 = count_some_var ("x", (TupleP [Variable("x"), Variable("a"), Variable("x")])) = 2

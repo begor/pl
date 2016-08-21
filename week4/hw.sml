@@ -103,7 +103,6 @@ fun all_answers f xs =
 	end
 
 (* 9 *)
-fun count_wildcards p = g (fn () => 1) (fn x => 0) p
-
-(* 10 *)
+fun count_wildcards p = g (fn () => 1) (fn _ => 0) p
 fun count_wild_and_variable_lengths p = g (fn () => 1) (fn x => String.size x) p
+fun count_some_var (s, p) = g (fn () => 0) (fn x => if x = s then 1 else 0) p
