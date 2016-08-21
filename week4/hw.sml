@@ -51,3 +51,11 @@ fun longest_string1 xs =
 	in 
 		List.foldl longer "" xs 
 	end
+
+(* 3 *)
+fun longest_string2 xs =
+	let 
+		fun longer(x, y) = if String.size x >= String.size y then x else y
+	in 
+		List.foldl longer "" xs 
+	end
