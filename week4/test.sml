@@ -71,3 +71,11 @@ val t111 = match (Const(1), UnitP) = NONE
 val t112 = match (Const(1), ConstP(1)) = SOME []
 val t113 = match ((Tuple [Const(1), Const(3)]),
 				  (TupleP [Variable("x"), Variable("a")])) = SOME [("x", Const 1),("a", Const 3)]
+
+(* 12 *)
+val test121 = first_match Unit [UnitP] = SOME []
+val test122 = first_match Unit [Wildcard, ConstP(1), UnitP] = SOME []
+val test123 = first_match (Const 1) [Wildcard, ConstP(1), UnitP] = SOME []
+val test124 = first_match (Const 1) [UnitP, UnitP] = NONE
+val test125 = first_match (Const 1) [Variable "x", Wildcard, ConstP(1), UnitP] = SOME [("x", Const 1)]
+val test126 = first_match (Const 1) [Wildcard, Variable "x", ConstP(1), UnitP] = SOME []

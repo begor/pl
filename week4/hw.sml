@@ -146,3 +146,7 @@ fun match (v, p) =
 	  												  then match(v, p) 
 	  												  else NONE
 	  							| _ => NONE)
+
+(* 12 *)
+fun first_match v ps =
+	SOME (first_answer (fn p => match (v, p)) ps) handle NoAnswer => NONE
