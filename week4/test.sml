@@ -59,3 +59,9 @@ val t9c1 = count_some_var ("x", Variable("x")) = 1
 val t9c2 = count_some_var ("x", Variable("a")) = 0
 val t9c3 = count_some_var ("x", (TupleP [Variable("x"), Variable("a"), UnitP])) = 1
 val t9c4 = count_some_var ("x", (TupleP [Variable("x"), Variable("a"), Variable("x")])) = 2
+
+(* 10 *)
+val t101 = check_pat (Variable("x")) = true
+val t102 = check_pat (TupleP [Variable("x"), Variable("a"), UnitP]) = true
+val t103 = check_pat (TupleP [Variable("x"), Variable("a"), Variable("a")]) = false
+val t104 = check_pat UnitP = true

@@ -103,6 +103,24 @@ fun all_answers f xs =
 	end
 
 (* 9 *)
-fun count_wildcards p = g (fn () => 1) (fn _ => 0) p
-fun count_wild_and_variable_lengths p = g (fn () => 1) (fn x => String.size x) p
-fun count_some_var (s, p) = g (fn () => 0) (fn x => if x = s then 1 else 0) p
+fun count_wildcards p = g (fn _ => 1) (fn _ => 0) p
+fun count_wild_and_variable_lengths p = g (fn _ => 1) (fn x => String.size x) p
+fun count_some_var (s, p) = g (fn _ => 0) (fn x => if x = s then 1 else 0) p
+
+
+(* 10 *)
+fun check_pat p = 
+	let fun get_vars p = 
+		case p of
+		  Variable x        => [x]
+		  | TupleP ps       => List.foldl (fn (x,acc) => x @ acc) [] (List.map get_vars ps)
+		  | _               => []
+		fun check xs =
+			case xs of
+				[] => true
+				| x::xs' => if not (List.exists (fn y => y = x) xs')
+							then check(xs')
+							else false
+	in 
+		check (get_vars p)
+	end
