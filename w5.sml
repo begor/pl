@@ -44,11 +44,11 @@ So far: sum : int list -> int
 
 But his will not type-check, because we call int list -> int with int
 
-*)
 fun sum xs =
     case xs of
         [] => 0
         | x::xs' => x + sum x
+*)
 
 
 (* Polymorphic types *)
@@ -69,3 +69,19 @@ fun len xs =
     case xs of
         [] => 0
         | x::xs' => 1 + len xs'
+
+
+(* 
+
+f : T1 -> T2
+T1 = T3 * T4 * T5
+T2 = T3 * T4 * T5 | T4 * T3 * T5 = T3 * T3 * T5 (we need it to return the same type)
+
+So,
+f : 'a * 'a * 'b -> 'a * 'a * 'b
+
+*)
+fun f (x, y, z) = 
+    if true
+    then (x, y, z)
+    else (y, x, z)
