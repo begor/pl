@@ -85,3 +85,18 @@ fun f (x, y, z) =
     if true
     then (x, y, z)
     else (y, x, z)
+
+(*
+compose : T1 * T2 -> T3
+f       : T1
+g       : T2 
+x       : T4
+T3      = T4 -> T5          
+T2      = T4 -> T6
+T1      = T6 -> T5
+
+So,
+
+compose : ('a -> 'b) * ('c -> 'a) -> ('c -> 'b)
+*)
+fun compose (f, g) = fn x => f(g x)
