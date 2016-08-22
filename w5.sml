@@ -44,3 +44,23 @@ fun sum xs =
 	case xs of
 		[] => 0
 		| x::xs' => x + sum x
+
+
+(* Polymorphic types *)
+
+(*
+len : T1 -> T2
+xs  : T1
+xs  : T3 list (pattern match it)
+T2  : int (return 0 in one branch)
+x   : T3 
+
+So far: len: T3 list -> int
+This is all the constraints, so T3 can be any type, call it 'a
+So:
+len: 'a list -> int
+*)
+fun len xs =
+	case xs of
+		[] => 0
+		| x::xs' => 1 + len xs'
