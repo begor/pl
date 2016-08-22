@@ -6,10 +6,13 @@ sum : T1 -> T2
 xs  : T1
 
 xs  : T3 list (pattern-match against list)
-T2  : int ([] => 0, and 0 is an int)
+T1  = T3 list
+T2  = int ([] => 0, and 0 is an int)
 x   : T3
 xs' : T3 list (x::xs pattern)
 x   : int (we + it, and + must be an int, because other matching branch is an int)
+T3  = int
+T1  = int list
 xs' : int list
 
 So,
@@ -18,9 +21,9 @@ sum : int list -> int
 
 *)
 fun sum xs =
-	case xs of
-		[] => 0
-		| x::xs' => x + sum xs'
+    case xs of
+        [] => 0
+        | x::xs' => x + sum xs'
 
 (*
 
@@ -30,10 +33,12 @@ sum : T1 -> T2
 xs  : T1
 
 xs  : T3 list (pattern-match against list)
-T2  : int ([] => 0, and 0 is an int)
+T1  = T3 list
+T2  = int ([] => 0, and 0 is an int)
 x   : T3
 xs' : T3 list (x::xs pattern)
 x   : int (we + it, and + must be an int, because other matching branch is an int)
+T3  = int
 
 So far: sum : int list -> int
 
@@ -41,9 +46,9 @@ But his will not type-check, because we call int list -> int with int
 
 *)
 fun sum xs =
-	case xs of
-		[] => 0
-		| x::xs' => x + sum x
+    case xs of
+        [] => 0
+        | x::xs' => x + sum x
 
 
 (* Polymorphic types *)
@@ -61,6 +66,6 @@ So:
 len: 'a list -> int
 *)
 fun len xs =
-	case xs of
-		[] => 0
-		| x::xs' => 1 + len xs'
+    case xs of
+        [] => 0
+        | x::xs' => 1 + len xs'
