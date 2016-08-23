@@ -129,3 +129,15 @@ datatype t1 =
 and t2 =
     Three of int
     | Four of t1
+
+
+(* Modules for Namespace Management *)
+structure MyMath = 
+struct
+    fun fact x = 
+        if x = 0
+        then 1
+        else x * fact (x - 1)
+end
+
+val hundred_twenty = MyMath.fact 5
