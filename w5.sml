@@ -100,3 +100,32 @@ So,
 compose : ('a -> 'b) * ('c -> 'a) -> ('c -> 'b)
 *)
 fun compose (f, g) = fn x => f(g x)
+
+
+(* Mutual recursion and state machines *)
+fun match xs = 
+    let fun need_one xs =
+            case xs of
+                [] => true
+                | 1::xs' => need_two xs'
+                | _ => false
+        (* and instead of fun for mutual recursion *)
+        and need_two xs =
+            case xs of
+                [] => false
+                | 2::xs' => need_one xs'
+                | _ => false
+    in
+        need_one xs
+    end
+
+val t = match [1, 2, 1, 2, 1, 2]
+val f = match [1, 2, 2, 1]
+
+(* Works with datatypes also *)
+datatype t1 = 
+    One of int 
+    | Two of t2
+and t2 =
+    Three of int
+    | Four of t1
