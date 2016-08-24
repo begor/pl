@@ -130,14 +130,21 @@ and t2 =
     Three of int
     | Four of t1
 
+(* Signatures *)
+signature MATH = 
+sig
+    val fact : int -> int
+    (* val half_pi : real *) (* Omitting is the form of hiding *) 
+end
 
-(* Modules for Namespace Management *)
-structure MyMath = 
+structure MyMath :> MATH = 
 struct
     fun fact x = 
         if x = 0
         then 1
         else x * fact (x - 1)
+    val half_pi = Math.pi / 2.0
 end
 
 val hundred_twenty = MyMath.fact 5
+(* val an_error = MyMath.half_pi *)
