@@ -148,3 +148,46 @@ end
 
 val hundred_twenty = MyMath.fact 5
 (* val an_error = MyMath.half_pi *)
+
+
+(* ADT *)
+structure Rational = 
+struct
+    datatype rational = Whole of int | Frac of int * int
+    exception BadFrac
+
+    fun gcd(x, y) =
+        if x = y
+        then x
+        else if x < y
+        then gcd(x, y-x)
+        else gcd(y, x)
+
+    fun reduce r =
+        case r of
+            Whole _ => r
+            | Frac (x, y) => 
+                if x = 0
+                then Whole 0
+                else let val d = gcd(abs x, y) in
+                        if d = y
+                        then Whole (x div d)
+                        else Frac (x div d, y div d)
+                    end
+
+    fun make_frac (x, y) = 
+        if y = 0
+        then raise BadFrac
+        else if y < 0
+        then reduce(Frac(~x, ~y))
+        else reduce(Frac(x, y))
+
+
+    fun toString r =
+        case r of
+            Whole i => Int.toString i
+            | Frac(x, y) => Int.toString x ^ "/" ^ Int.toString y
+end
+
+val one_fourth = Rational.toString(Rational.make_frac(2, 8))
+val five = Rational.make_frac(20, 4)
