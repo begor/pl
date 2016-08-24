@@ -151,7 +151,16 @@ val hundred_twenty = MyMath.fact 5
 
 
 (* ADT *)
-structure Rational = 
+signature RATIONAL = 
+sig
+    type rational (* don't reveal it, just say it exists. Not to ruin invariants and let clients only use make_frac *)
+
+    val make_frac : (int * int) -> rational
+    val toString : rational -> string
+end
+
+
+structure Rational :> RATIONAL = 
 struct
     datatype rational = Whole of int | Frac of int * int
     exception BadFrac
@@ -177,9 +186,9 @@ struct
 
     fun make_frac (x, y) = 
         if y = 0
-        then raise BadFrac
-        else if y < 0
-        then reduce(Frac(~x, ~y))
+        then raise BadFrac (* property: no 0 denominators *)
+        else if y < 0 (* invariant: denominator can't be negative *)
+        then reduce(Frac(~x, ~y)) 
         else reduce(Frac(x, y))
 
 
