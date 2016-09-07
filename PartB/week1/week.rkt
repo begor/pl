@@ -2,6 +2,8 @@
 
 (provide (all-defined-out))
 
+;; Definitions
+
 (define x 3)
 
 (define cube1
@@ -27,3 +29,20 @@
   (if (= y 0)
       1
       (* x ((pow3 x) (- y 1)))))
+
+;; Lists
+
+(define (sum xs)
+  (if (null? xs)
+      0
+      (+ (car xs) (sum (cdr xs)))))
+
+(define (my-append xs ys)
+  (if (null? xs)
+      ys
+      (cons (car xs) (my-append (cdr xs) ys))))
+
+(define (my-map fn xs)
+  (if (null? xs)
+      null
+      (cons (fn (car xs)) (my-map fn (cdr xs)))))
