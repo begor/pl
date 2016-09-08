@@ -46,3 +46,28 @@
   (if (null? xs)
       null
       (cons (fn (car xs)) (my-map fn (cdr xs)))))
+
+;; Dynamic typing
+
+(define xs
+  (list 1 2 3 4 5 6))
+(define ys
+  (list 1 2 (list (list 3 4) 5) (list 6)))
+
+; We can define a function that can take arbiraty nested list of [lists] ints.
+(define (sum1 xs)
+  (if (null? xs)
+      0
+      (if (number? (car xs))
+          (+ (car xs)
+             (sum1 (cdr xs)))
+          (+ (sum1 (car xs))
+             (sum1 (cdr xs))))))
+
+;; Cond
+(define (sum2 xs)
+  (cond [(null? xs) 0]
+        [(number? (car xs))
+         (+ (car xs) (sum2 (cdr xs)))]
+        [#t
+         (+ (sum2 (car xs)) (sum2 (cdr xs)))]))
