@@ -71,29 +71,3 @@
          (+ (car xs) (sum2 (cdr xs)))]
         [#t
          (+ (sum2 (car xs)) (sum2 (cdr xs)))]))
-
-
-;; Local bindings
-(define (max-of-list xs)
-  (cond [(null? xs) (error "max-of-list called with empty list")]
-        [(null? (cdr xs)) (car xs)]
-        [#t (let ([max-tl (max-of-list (cdr xs))])
-              (if (> (car xs) max-tl)
-                  (car xs)
-                  max-tl))]))
-
-(define (silly-double1 x)
-  (let ([x (+ x 2)]
-        [y (+ x 3)])
-    (- (+ x y) 5)))
-
-(define (silly-double2 x)
-  (let* ([x (+ x 2)]
-         [y (+ x 3)]) ; Previous bindings available in scope
-    (- (+ x y) 8)))
-
-(define (silly-triple x)
-  (letrec ([y (+ x 2)] ; All (previous and proceeding) bindings are available, great for mutual recursion
-           [doubler (lambda (z) (- (+ z y w) 5))]
-           [w (+ x 3)])
-    (doubler x)))
