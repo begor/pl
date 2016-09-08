@@ -97,3 +97,13 @@
            [doubler (lambda (z) (- (+ z y w) 5))]
            [w (+ x 3)])
     (doubler x)))
+
+;; Module bindings
+
+(define a 17)
+
+(define (f x) (+ x a b)) ; Can use later bindings (b)
+
+(define b 34)
+
+(f 9)
