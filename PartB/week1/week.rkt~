@@ -125,22 +125,3 @@
 (define mut-original (mcons 14 null))
 (define mut-alias mut-original)
 (set-mcar! mut-original 42) ; affects both original and alias
-
-
-;; Delayed evaluation
-
-(define (bad-if pred tb fb) ; Args to functions evaluated eagerly
-  (if pred tb fb)) ; If branches evaluated if needed
-
-(define (bad-fact x)
-  (bad-if (= x 0)
-          1
-          (* x (bad-fact (- x 1))))) ; Never terminates because in order to call bad-if (function) we need to eval all the args
-
-(define (strange-if pred x y)
-  (if pred (x) (y))) ; Works because x and y must be 0-args functions, that return needed results
-
-(define (strange-fact x)
-  (strange-if (= x 0)
-              (lambda () 1) ; Delayed evaluation - put expression in a function (closure). Such a function called "thunk".
-              (lambda () (* x (strange-fact (- x 1)))))) ; Works too, because funcs doesn't evaluate its bodies until call
