@@ -198,6 +198,12 @@
 
 ;; Memoization
 
+(define (bad-fibo n)
+  (if (or (= n 1) (= n 2))
+      1
+      (+ (bad-fibo (- n 1))
+         (bad-fibo (- n 2)))))
+
 (define (fibo n)
   (letrec ([memo null]
            [f (lambda (x)
@@ -206,7 +212,7 @@
                       (cdr ans)
                       (let ([new-ans (if (or (= x 1) (= x 2))
                                          1
-                                         (+ (f (- x 1)) (f (- x 2))))]])
+                                         (+ (f (- x 1)) (f (- x 2))))])
                         (begin
                           (set! memo (cons (cons x new-ans) memo))
                           new-ans)))))])
