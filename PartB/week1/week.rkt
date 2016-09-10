@@ -107,3 +107,21 @@
 (define b 34)
 
 (f 9)
+
+;; Pairs and lists
+
+(define pair (cons 1 (cons 2 3))) ; this is a pair (or "unproper" list)
+(define lst (cons 1 (cons 2 (cons 3 null)))) ; this is a "proper" list (notice null)
+(define false (list? pair))
+(define true (list? lst))
+
+
+;; Mutable pairs
+
+(define original (cons 14 null))
+(define alias original)
+(set! original (cons 42 null)) ; changes original to '(42), but doesn't affect alias.
+
+(define mut-original (mcons 14 null))
+(define mut-alias mut-original)
+(set-mcar! mut-original 42) ; affects both original and alias
