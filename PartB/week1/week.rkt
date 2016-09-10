@@ -194,3 +194,21 @@
 
 (define nats2 (stream-maker (lambda (x) (+ x 1)) 1)) 
 (define pow-of-two2 (stream-maker (lambda (x) (* x 2)) 2))
+
+
+;; Memoization
+
+(define (fibo n)
+  (letrec ([memo null]
+           [f (lambda (x)
+                (let ([ans (assoc x memo)])
+                  (if ans
+                      (cdr ans)
+                      (let ([new-ans (if (or (= x 1) (= x 2))
+                                         1
+                                         (+ (f (- x 1)) (f (- x 2))))]])
+                        (begin
+                          (set! memo (cons (cons x new-ans) memo))
+                          new-ans)))))])
+    (f n)))
+                      
