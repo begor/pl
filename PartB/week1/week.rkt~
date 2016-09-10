@@ -163,34 +163,3 @@
 
 ;; Streams
 
-(define (number-until stream pred) ; how many elements of a stream should be proceeded until pred is true
-  (letrec ([f (lambda (stream ans)
-                (let ([pr (stream)])
-                  (if (pred (car pr))
-                      ans
-                      (f (cdr pr) (+ ans 1)))))])
-    (f stream 1)))
-
-(define ones
-  (lambda ()
-    (cons 1 ones))) ; Stream of ones (1 1 1 1 ... 1)
-
-(define nats
-  (letrec ([f (lambda (x)
-                (cons x (lambda () (f (+ x 1)))))])
-    (lambda () (f 1)))) ; Streams of natural numbers (1 2 3 4 ...)
-
-(define pow-of-two
-  (letrec ([f (lambda (x)
-                (cons x (lambda () (f (* x 2)))))])
-    (lambda () (f 2)))) ; Streams of powers of two (2 4 8 16 ...)
-
-; Abstracts creating of streams
-
-(define (stream-maker fn arg)
-  (letrec ([f (lambda (x)
-                (cons x (lambda () (f (fn x)))))])
-    (lambda () (f arg))))
-
-(define nats2 (stream-maker (lambda (x) (+ x 1)) 1)) 
-(define pow-of-two2 (stream-maker (lambda (x) (* x 2)) 2))
