@@ -144,3 +144,22 @@
   (strange-if (= x 0)
               (lambda () 1) ; Delayed evaluation - put expression in a function (closure). Such a function called "thunk".
               (lambda () (* x (strange-fact (- x 1)))))) ; Works too, because funcs doesn't evaluate its bodies until call
+
+
+;; Lazy evaluation (aka promises)
+;; Represented as an ADT, which is a one-of type:
+;; either a thunk, or a result of evaluating it.
+
+(define (delay thunk)
+  (mcons #f thunk)) ; #f means that thunk hasn't been evaluated
+
+(define (force thunk)
+  (if (mcar thunk)
+      (mcdr thunk)
+      (begin
+        (set-mcar! thunk #t) ; it will be evaluated
+        (set-mcdr! thunk ((mcdr thunk)))
+        (mcdr thunk))))
+
+;; Streams
+
