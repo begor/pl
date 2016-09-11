@@ -29,6 +29,14 @@
       (let ([cur (s)])
         (cons (car cur)
               (stream-for-n-steps (cdr cur) (- n 1))))))
+
+; 5
+(define (funny-number-stream)
+  (letrec ([f (lambda (x)
+           (if (= (remainder x 5) 0)
+               (cons (- 0 x) (lambda () (f (+ x 1))))
+               (cons x (lambda () (f (+ x 1))))))])
+    (f 1)))
       
                    
                    

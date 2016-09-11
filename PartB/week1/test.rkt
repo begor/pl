@@ -29,6 +29,8 @@
    (check-equal? (list-nth-mod (list 0 1 2 3 4) 2) 2 "list-nth-mod test")
 
    (check-equal? (stream-for-n-steps (lambda () (cons 1 ones)) 10) (list 1 1 1 1 1 1 1 1 1 1) "stream-for-n-steps test")
+
+   (check-equal? (stream-for-n-steps funny-number-stream 16) (list 1 2 3 4 -5 6 7 8 9 -10 11 12 13 14 -15 16) "funny-number-stream test")
    
    ))
 
