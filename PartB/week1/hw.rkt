@@ -47,4 +47,9 @@
                   (cons x (lambda () (f next)))))])
     (f "dan.jpg")))
 
-
+; 7
+(define (stream-add-zero s)
+  (lambda ()
+    (let ([next (s)])
+      (cons (cons 0 (car next))
+            (stream-add-zero (cdr next))))))

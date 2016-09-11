@@ -35,6 +35,10 @@
    (check-equal? (stream-for-n-steps dan-then-dog 1) (list "dan.jpg") "dan-then-dog test")
 
    (check-equal? (stream-for-n-steps dan-then-dog 3) (list "dan.jpg" "dog.jpg" "dan.jpg") "dan-then-dog test 2")
+
+   (check-equal? (stream-for-n-steps (stream-add-zero ones) 1) (list (cons 0 1)) "stream-add-zero test")
+
+   (check-equal? (stream-for-n-steps (stream-add-zero funny-number-stream) 3) (list (cons 0 1) (cons 0 2) (cons 0 3)) "stream-add-zero test")
    
    ))
 
