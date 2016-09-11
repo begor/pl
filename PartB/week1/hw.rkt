@@ -33,10 +33,18 @@
 ; 5
 (define (funny-number-stream)
   (letrec ([f (lambda (x)
-           (if (= (remainder x 5) 0)
-               (cons (- 0 x) (lambda () (f (+ x 1))))
-               (cons x (lambda () (f (+ x 1))))))])
+                (if (= (remainder x 5) 0)
+                    (cons (- 0 x) (lambda () (f (+ x 1))))
+                    (cons x (lambda () (f (+ x 1))))))])
     (f 1)))
-      
-                   
-                   
+
+; 6
+(define (dan-then-dog)
+  (letrec ([f (lambda (x)
+                (let ([next (if (equal? x "dan.jpg")
+                                "dog.jpg"
+                                "dan.jpg")])
+                  (cons x (lambda () (f next)))))])
+    (f "dan.jpg")))
+
+
