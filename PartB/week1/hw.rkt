@@ -68,6 +68,23 @@
                           current
                           (f (+ pos 1))))))])
     (f 0)))
-                 
-             
+
+; 10
+(define (cached-assoc xs n)
+  (letrec ([cache (make-vector n #f)]
+           [pos 0]
+           [finder (lambda (x)
+                     (let ([try-from-cache (vector-assoc x cache)])
+                       (if try-from-cache
+                           try-from-cache
+                           (let ([ans (assoc x xs)])
+                             (if ans
+                                 (let ([ins (if (< pos n) pos 0)])
+                                   (begin
+                                     (vector-set! cache ins ans)
+                                     (set! pos (+ pos 1))
+                                     ans))
+                                 #f)))))])
+    finder))
+
 
