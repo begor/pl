@@ -39,6 +39,12 @@
    (check-equal? (stream-for-n-steps (stream-add-zero ones) 1) (list (cons 0 1)) "stream-add-zero test")
 
    (check-equal? (stream-for-n-steps (stream-add-zero funny-number-stream) 3) (list (cons 0 1) (cons 0 2) (cons 0 3)) "stream-add-zero test")
+
+   (check-equal? (vector-assoc 4 (vector (cons 2 1) (cons 3 1) (cons 4 1) (cons 5 1))) (cons 4 1) "vector-assoc test")
+
+   (check-equal? (vector-assoc 5 (vector (cons 2 1) (cons 3 1) (cons 4 1) (cons 5 1))) (cons 5 1) "vector-assoc test")
+
+   (check-equal? (vector-assoc 6 (vector (cons 2 1) (cons 3 1) (cons 4 1) (cons 5 1))) #f "vector-assoc test")
    
    ))
 

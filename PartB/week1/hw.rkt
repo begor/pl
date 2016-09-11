@@ -33,9 +33,10 @@
 ; 5
 (define (funny-number-stream)
   (letrec ([f (lambda (x)
-                (if (= (remainder x 5) 0)
-                    (cons (- 0 x) (lambda () (f (+ x 1))))
-                    (cons x (lambda () (f (+ x 1))))))])
+                (let ([y (if (= (remainder x 5) 0)
+                             (- 0 x)
+                             x)])
+                  (cons y (lambda () (f (+ x 1))))))])
     (f 1)))
 
 ; 6
@@ -53,3 +54,20 @@
     (let ([next (s)])
       (cons (cons 0 (car next))
             (stream-add-zero (cdr next))))))
+
+; 8
+
+; 9
+(define (vector-assoc v vec)
+  (letrec ([max-ref (- (vector-length vec) 1)]
+           [f (lambda (pos)
+                (if (> pos max-ref)
+                    #f
+                    (let ([current (vector-ref vec pos)])
+                      (if (and (pair? current) (equal? v (car current)))
+                          current
+                          (f (+ pos 1))))))])
+    (f 0)))
+                 
+             
+
