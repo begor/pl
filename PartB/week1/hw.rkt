@@ -18,9 +18,8 @@
 (define (list-nth-mod xs n)
   (cond [(< n 0) (error "list-nth-mod: negative number")]
         [(null? xs) (error "list-nth-mod: empty list")]
-        [#t (let* ([l (length xs)]
-                   [rem (remainder l n)])
-              (car (list-tail xs (+ rem 1))))]))
+        [#t (let ([rem (remainder n (length xs))])
+              (car (list-tail xs rem)))]))
 
 ; 4
 (define (stream-for-n-steps s n)
@@ -56,6 +55,14 @@
             (stream-add-zero (cdr next))))))
 
 ; 8
+(define (cycle-lists xs ys)
+  (letrec ([f (lambda (n)
+                (lambda ()
+                  (cons (cons (list-nth-mod xs n)
+                              (list-nth-mod ys n))
+                        (f (+ n 1)))))])
+    (f 0)))
+
 
 ; 9
 (define (vector-assoc v vec)
