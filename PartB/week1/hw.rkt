@@ -22,7 +22,13 @@
                    [rem (remainder l n)])
               (car (list-tail xs (+ rem 1))))]))
 
-
+; 4
+(define (stream-for-n-steps s n)
+  (if (= n 0)
+      null
+      (let ([cur (s)])
+        (cons (car cur)
+              (stream-for-n-steps (cdr cur) (- n 1))))))
       
                    
                    
