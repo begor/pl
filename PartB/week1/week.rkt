@@ -220,4 +220,24 @@
 
 
 ;; Macros
+(define-syntax my-if
+  (syntax-rules (then else) ; List of "special" tokens to use inside macro
+    [(my-if e1 then e2 else e3)
+     (if e1 e2 e3)]))
 
+(define-syntax unless
+  (syntax-rules (then else)
+    [(unless e1 then e2 else e3)
+     (if (not e1) e2 e2)]))
+
+(define-syntax comment-out
+  (syntax-rules ()
+    [(comment-out e1 e2) e2]))
+
+; Delays evaluation without explicit thunk.
+; Cannot implement this with a normal function (eager argument's evaluation).
+(define-syntax my-delay
+  (syntax-rules ()
+    [(my-delay e) (mcons #f (lambda () e))]))
+
+; force shouldn't be a macro. Function is just fine.
