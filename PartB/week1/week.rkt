@@ -236,8 +236,31 @@
 
 ; Delays evaluation without explicit thunk.
 ; Cannot implement this with a normal function (eager argument's evaluation).
+; force shouldn't be a macro. Function is just fine.
 (define-syntax my-delay
   (syntax-rules ()
     [(my-delay e) (mcons #f (lambda () e))]))
 
-; force shouldn't be a macro. Function is just fine.
+
+(define-syntax for
+  (syntax-rules (to do)
+    [(for lo to hi do body)
+     (let ([l lo]  ; Need to evaluate lo and hi only once (this is how macro works) 
+           [h hi]) ; and put them into variables
+       (letrec ([loop (lambda (it)
+                        (if (> it h)
+                            #t
+                            (begin body ; Evaluate body for every number between l and h
+                                   (loop (+ it 1)))))])
+         (loop l)))]))
+
+; Example of recursive macro
+(define-syntax my-let*
+  (syntax-rules ()
+    [(my-let* () body) body]
+    [(my-let* ([var0 val0]
+               [varn valn] ...) ; Special one: one or more patterns
+              body)
+     (let ([var0 val0])
+       (my-let* ([varn valn] ...)
+                body))]))
