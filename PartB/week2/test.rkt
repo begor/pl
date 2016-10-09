@@ -26,6 +26,11 @@
    (check-equal? (eval-exp (ifgreater (int 3) (int 4) (int 3) (int 2))) (int 2) "ifgreater test")
    (check-equal? (eval-exp (ifgreater (int 4) (int 3) (int 3) (int 2))) (int 3) "ifgreater test")
    (check-exn exn:fail? (lambda () (eval-exp (ifgreater (int 3) (var "s") (int 3) (int 2)))))
+
+   ;; mlet test
+   (check-equal? (eval-exp (mlet "x" (int 1) (add (int 5) (var "x")))) (int 6) "mlet test")
+   (check-equal? (eval-exp (mlet "x" (int 1) (ifgreater (int 5) (var "x") (int 3) (int 4)))) (int 3) "mlet test")
+   (check-equal? (eval-exp (mlet "x" (int 6) (ifgreater (int 5) (var "x") (int 3) (int 4)))) (int 4) "mlet test")
    
    ))
 

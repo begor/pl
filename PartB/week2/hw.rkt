@@ -56,8 +56,8 @@
                (error "MUPL addition applied to non-number")))]
         [(or (int? e) (closure? e) (aunit? e)) e]
         [(ifgreater? e)
-         (let ([e1 (ifgreater-e1 e)]
-               [e2 (ifgreater-e2 e)]
+         (let ([e1 (eval-under-env (ifgreater-e1 e) env)]
+               [e2 (eval-under-env (ifgreater-e2 e) env)]
                [e3 (ifgreater-e3 e)]
                [e4 (ifgreater-e4 e)])
            (if (and (int? e1)
@@ -67,6 +67,13 @@
                    (eval-under-env e3 env)
                    (eval-under-env e4 env))
                (error "MUPL ifgreater applied to non-number")))]
+        [(mlet? e)
+         (let* ([let-v (mlet-var e)]
+                [let-e (mlet-e e)]
+                [body (mlet-body e)]
+                [value (eval-under-env let-e env)]
+                [new-env (cons (cons let-v value) env)])
+           (eval-under-env body new-env))]
         [#t (error (format "bad MUPL expression: ~v" e))]))
 
 ;; Do NOT change
