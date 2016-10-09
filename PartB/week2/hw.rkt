@@ -27,9 +27,9 @@
 
 ;; Problem 2
 (define (mupllist->racketlist ms)
-  (if (apair? ms)
-      (cons (apair-e1 ms) (mupllist->racketlist (apair-e2 ms)))
-      null))
+  (if (aunit? ms)
+      null
+      (cons (apair-e1 ms) (mupllist->racketlist (apair-e2 ms)))))
 
 
 ;; lookup a variable in an environment
