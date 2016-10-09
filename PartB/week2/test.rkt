@@ -42,6 +42,16 @@
    (check-equal? (eval-exp (snd (apair (int 1) (int 2)))) (int 2) "snd test")
    (check-exn exn:fail? (lambda () (eval-exp (snd (int 3)))))
    (check-exn exn:fail? (lambda () (eval-exp (fst (int 3)))))
+   
+   ;; isaunit test
+   (check-equal? (eval-exp (isaunit (closure '() (fun #f "x" (aunit))))) (int 0) "isaunit test")
+   (check-equal? (eval-exp (isaunit (aunit))) (int 1) "isaunit test")
+   
+   ;; call test
+   (check-equal? (eval-exp (call (closure '() (fun #f "x" (add (var "x") (int 7)))) (int 1))) (int 8) "call test")
+   (check-equal? (eval-exp (call (closure (list (cons "a" (int 1))) (fun "name" "z" (add (var "z") (var "a")))) (int 2))) (int 3) "call test")
+   (check-exn exn:fail? (lambda () (eval-exp (call (fun "name" "z" (add (var "z") (var "a"))) (int 2)))))
+   
    ))
 
 (require rackunit/text-ui)

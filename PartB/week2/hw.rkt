@@ -69,6 +69,10 @@
            (if (apair? epair)
                (apair-e2 epair)
                (error "MUPL snd applied to non-pair")))]
+        [(isaunit? e)
+         (if (aunit? (isaunit-e e))
+             (int 1)
+             (int 0))]
         [(ifgreater? e)
          (let ([e1 (eval-under-env (ifgreater-e1 e) env)]
                [e2 (eval-under-env (ifgreater-e2 e) env)]
@@ -88,6 +92,20 @@
                 [value (eval-under-env let-e env)]
                 [new-env (cons (cons let-v value) env)])
            (eval-under-env body new-env))]
+        [(call? e)
+         (let ([fclosure (eval-under-env (call-funexp e) env)]
+               [params (eval-under-env (call-actual e) env)])
+           (if (closure? fclosure)
+               (let* ([env (closure-env fclosure)]
+                      [fun (closure-fun fclosure)]
+                      [body (fun-body fun)]
+                      [nameopt (fun-nameopt fun)]
+                      [formal (fun-formal fun)]
+                      [rec-env (if nameopt
+                                   (cons (cons nameopt fclosure) env)
+                                   env)])
+                 (eval-under-env body (cons (cons formal params) env)))
+               (error "MUPL call appliend to non-callable")))]
         [#t (error (format "bad MUPL expression: ~v" e))]))
 
 ;; Do NOT change
