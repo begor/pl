@@ -52,19 +52,27 @@
    (check-equal? (eval-exp (call (closure (list (cons "a" (int 1))) (fun "name" "z" (add (var "z") (var "a")))) (int 2))) (int 3) "call test")
    (check-equal? (eval-exp (call (closure (list (cons "a" (int 1))) (fun "name" "z" (add (var "z") (var "a")))) (int 2))) (int 3) "call test")
    (check-exn exn:fail? (lambda () (eval-exp (call (fun "name" "z" (add (var "z") (var "a"))) (int 2)))))
-
+   
    ;; ifaunit test
    (check-equal? (eval-exp (ifaunit (int 1) (int 2) (int 3))) (int 3) "ifaunit test")
    (check-equal? (eval-exp (ifaunit (aunit) (int 2) (int 3))) (int 2) "ifaunit test")
-
+   
    ;; mlet* test
    (check-equal? (eval-exp (mlet* (list (cons "x" (int 10))) (var "x"))) (int 10) "mlet* test")
    (check-equal? (eval-exp (mlet* (list (cons "x" (int 10)) (cons "y" (add (int 10) (var "x")))) (var "y"))) (int 20) "mlet* test")
-
+   
    ;; ifeq test
    (check-equal? (eval-exp (ifeq (int 1) (int 2) (int 3) (int 4))) (int 4) "ifeq test")
    (check-equal? (eval-exp (ifeq (int 2) (int 1) (int 3) (int 4))) (int 4) "ifeq test")
    (check-equal? (eval-exp (ifeq (int 1) (int 1) (int 3) (int 4))) (int 3) "ifeq test")
+   
+   ;; mupl-map test
+   (check-equal? (eval-exp (call (call mupl-map (fun #f "x" (add (var "x") (int 7)))) (apair (int 1) (aunit)))) 
+                 (apair (int 8) (aunit)) "mupl-map test")
+   (check-equal? (eval-exp (call (call mupl-map (fun #f "x" (add (var "x") (int 1)))) (apair (int 1) (apair (int 2) (apair (int 3) (aunit)))))) 
+                 (apair (int 2) (apair (int 3) (apair (int 4) (aunit)))) "mupl-map test")
+   (check-equal? (eval-exp (call (call mupl-map (fun #f "x" (add (var "x") (int 1)))) (aunit)))
+                 (aunit) "mupl-map test")
    
    ))
 

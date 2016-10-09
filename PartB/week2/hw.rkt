@@ -94,17 +94,17 @@
                [e2 (eval-under-env (apair-e2 e) env)])
            (apair e1 e2))]
         [(fst? e)
-         (let ([pair (fst-e e)])
+         (let ([pair (eval-under-env (fst-e e) env)])
            (if (apair? pair)
                (apair-e1 pair)
                (error "MUPL fst applied to non-pair")))]
         [(snd? e)
-         (let ([pair (snd-e e)])
+         (let ([pair (eval-under-env (snd-e e) env)])
            (if (apair? pair)
                (apair-e2 pair)
                (error "MUPL snd applied to non-pair")))]
         [(isaunit? e)
-         (if (aunit? (isaunit-e e))
+         (if (aunit? (eval-under-env (isaunit-e e) env))
              (int 1)
              (int 0))]
         [#t (error (format "bad MUPL expression: ~v" e))]))
@@ -135,7 +135,13 @@
 
 ;; Problem 4
 
-(define mupl-map "CHANGE")
+(define mupl-map
+  (fun #f "fn"
+       (fun "map" "xs"
+            (ifaunit (var "xs")
+                     (aunit)
+                     (apair (call (var "fn") (fst (var "xs")))
+                            (call (var "map") (snd (var "xs"))))))))
 
 (define mupl-mapAddN 
   (mlet "map" mupl-map
