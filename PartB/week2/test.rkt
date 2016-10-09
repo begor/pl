@@ -50,6 +50,7 @@
    ;; call test
    (check-equal? (eval-exp (call (closure '() (fun #f "x" (add (var "x") (int 7)))) (int 1))) (int 8) "call test")
    (check-equal? (eval-exp (call (closure (list (cons "a" (int 1))) (fun "name" "z" (add (var "z") (var "a")))) (int 2))) (int 3) "call test")
+   (check-equal? (eval-exp (call (closure (list (cons "a" (int 1))) (fun "name" "z" (add (var "z") (var "a")))) (int 2))) (int 3) "call test")
    (check-exn exn:fail? (lambda () (eval-exp (call (fun "name" "z" (add (var "z") (var "a"))) (int 2)))))
    
    ))

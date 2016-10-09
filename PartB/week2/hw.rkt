@@ -54,58 +54,59 @@
                (int (+ (int-num v1) 
                        (int-num v2)))
                (error "MUPL addition applied to non-number")))]
-        [(or (int? e) (closure? e) (aunit? e)) e]
-        [(apair? e)
-         (let ([e1 (eval-under-env (apair-e1 e) env)]
-               [e2 (eval-under-env (apair-e2 e) env)])
-           (apair e1 e2))]
-        [(fst? e)
-         (let ([epair (fst-e e)])
-           (if (apair? epair)
-               (apair-e1 epair)
-               (error "MUPL fst applied to non-pair")))]
-        [(snd? e)
-         (let ([epair (snd-e e)])
-           (if (apair? epair)
-               (apair-e2 epair)
-               (error "MUPL snd applied to non-pair")))]
-        [(isaunit? e)
-         (if (aunit? (isaunit-e e))
-             (int 1)
-             (int 0))]
+        [(or (int? e) (closure? e) (aunit? e)) e] ;; All values evaluate to themselves
+        [(fun? e) (closure env e)]
         [(ifgreater? e)
-         (let ([e1 (eval-under-env (ifgreater-e1 e) env)]
-               [e2 (eval-under-env (ifgreater-e2 e) env)]
-               [e3 (ifgreater-e3 e)]
+         (let ([v1 (eval-under-env (ifgreater-e1 e) env)]
+               [v2 (eval-under-env (ifgreater-e2 e) env)]
+               [e3 (ifgreater-e3 e)] ;; Don't need to eval them all
                [e4 (ifgreater-e4 e)])
-           (if (and (int? e1)
-                    (int? e2))
-               (if (> (int-num e1)
-                      (int-num e2))
+           (if (and (int? v1)
+                    (int? v2))
+               (if (> (int-num v1)
+                      (int-num v2))
                    (eval-under-env e3 env)
                    (eval-under-env e4 env))
                (error "MUPL ifgreater applied to non-number")))]
         [(mlet? e)
-         (let* ([let-v (mlet-var e)]
-                [let-e (mlet-e e)]
+         (let* ([var (mlet-var e)]
+                [exp (mlet-e e)]
                 [body (mlet-body e)]
-                [value (eval-under-env let-e env)]
-                [new-env (cons (cons let-v value) env)])
+                [value (eval-under-env exp env)]
+                [new-env (cons (cons var value) env)])
            (eval-under-env body new-env))]
         [(call? e)
          (let ([fclosure (eval-under-env (call-funexp e) env)]
-               [params (eval-under-env (call-actual e) env)])
+               [arg (eval-under-env (call-actual e) env)])
            (if (closure? fclosure)
                (let* ([env (closure-env fclosure)]
                       [fun (closure-fun fclosure)]
                       [body (fun-body fun)]
                       [nameopt (fun-nameopt fun)]
-                      [formal (fun-formal fun)]
+                      [param (fun-formal fun)]
                       [rec-env (if nameopt
                                    (cons (cons nameopt fclosure) env)
                                    env)])
-                 (eval-under-env body (cons (cons formal params) env)))
+                 (eval-under-env body (cons (cons param arg) rec-env)))
                (error "MUPL call appliend to non-callable")))]
+        [(apair? e)
+         (let ([e1 (eval-under-env (apair-e1 e) env)]
+               [e2 (eval-under-env (apair-e2 e) env)])
+           (apair e1 e2))]
+        [(fst? e)
+         (let ([pair (fst-e e)])
+           (if (apair? pair)
+               (apair-e1 pair)
+               (error "MUPL fst applied to non-pair")))]
+        [(snd? e)
+         (let ([pair (snd-e e)])
+           (if (apair? pair)
+               (apair-e2 pair)
+               (error "MUPL snd applied to non-pair")))]
+        [(isaunit? e)
+         (if (aunit? (isaunit-e e))
+             (int 1)
+             (int 0))]
         [#t (error (format "bad MUPL expression: ~v" e))]))
 
 ;; Do NOT change
