@@ -18,6 +18,11 @@
    (check-equal? (racketlist->mupllist (list (int 3) (int 4))) (apair (int 3) (apair (int 4) (aunit))) "racketlist->mupllist test")
    (check-equal? (racketlist->mupllist null) (aunit) "racketlist->mupllist test")
    
+   ;; check mupllist to racketlist with normal list
+   (check-equal? (mupllist->racketlist (apair (int 3) (apair (int 4) (aunit)))) (list (int 3) (int 4)) "racketlist->mupllist test")
+   (check-equal? (mupllist->racketlist (aunit)) null "racketlist->mupllist test")
+
+   
    ))
 
 (require rackunit/text-ui)

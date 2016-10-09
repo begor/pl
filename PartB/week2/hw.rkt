@@ -26,6 +26,11 @@
       (apair (car rs) (racketlist->mupllist (cdr rs)))))
 
 ;; Problem 2
+(define (mupllist->racketlist ms)
+  (if (apair? ms)
+      (cons (apair-e1 ms) (mupllist->racketlist (apair-e2 ms)))
+      null))
+      
 
 ;; lookup a variable in an environment
 ;; Do NOT change this function
