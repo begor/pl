@@ -22,6 +22,10 @@
    (check-equal? (mupllist->racketlist (apair (int 3) (apair (int 4) (aunit)))) (list (int 3) (int 4)) "racketlist->mupllist test")
    (check-equal? (mupllist->racketlist (aunit)) null "racketlist->mupllist test")
 
+   ;; tests if ifgreater returns (int 2)
+   (check-equal? (eval-exp (ifgreater (int 3) (int 4) (int 3) (int 2))) (int 2) "ifgreater test")
+   (check-equal? (eval-exp (ifgreater (int 4) (int 3) (int 3) (int 2))) (int 3) "ifgreater test")
+   (check-exn exn:fail? (lambda () (eval-exp (ifgreater (int 3) (var "s") (int 3) (int 2)))))
    
    ))
 
