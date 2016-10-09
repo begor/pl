@@ -1,0 +1,25 @@
+#lang racket
+;; Programming Languages Homework 5 Simple Test
+;; Save this file to the same directory as your homework file
+;; These are basic tests. Passing these tests does not guarantee that your code will pass the actual homework grader
+
+;; Be sure to put your homework file in the same folder as this test file.
+;; Uncomment the line below and, if necessary, change the filename
+;;(require "hw5")
+
+(require rackunit)
+(require "hw.rkt")
+
+(define tests
+  (test-suite
+   "Sample tests for Assignment 5"
+   
+   ;; check racketlist to mupllist with normal list
+   (check-equal? (racketlist->mupllist (list (int 3) (int 4))) (apair (int 3) (apair (int 4) (aunit))) "racketlist->mupllist test")
+   (check-equal? (racketlist->mupllist null) (aunit) "racketlist->mupllist test")
+   
+   ))
+
+(require rackunit/text-ui)
+;; runs the test
+(run-tests tests)
