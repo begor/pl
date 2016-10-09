@@ -36,6 +36,12 @@
    (check-equal? (eval-exp (apair (int 4) (int 7))) (apair (int 4) (int 7)) "apair test")
    (check-equal? (eval-exp (apair (add (int 4) (int 3)) (int 7))) (apair (int 7) (int 7)) "apair test")
    (check-equal? (eval-exp (apair (apair (int 4) (add (int 7) (int 3))) (int 7))) (apair (apair (int 4) (int 10)) (int 7)) "apair test")
+   
+   ;;snd and fst test
+   (check-equal? (eval-exp (fst (apair (int 1) (int 2)))) (int 1) "snd test")
+   (check-equal? (eval-exp (snd (apair (int 1) (int 2)))) (int 2) "snd test")
+   (check-exn exn:fail? (lambda () (eval-exp (snd (int 3)))))
+   (check-exn exn:fail? (lambda () (eval-exp (fst (int 3)))))
    ))
 
 (require rackunit/text-ui)

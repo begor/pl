@@ -59,6 +59,16 @@
          (let ([e1 (eval-under-env (apair-e1 e) env)]
                [e2 (eval-under-env (apair-e2 e) env)])
            (apair e1 e2))]
+        [(fst? e)
+         (let ([epair (fst-e e)])
+           (if (apair? epair)
+               (apair-e1 epair)
+               (error "MUPL fst applied to non-pair")))]
+        [(snd? e)
+         (let ([epair (snd-e e)])
+           (if (apair? epair)
+               (apair-e2 epair)
+               (error "MUPL snd applied to non-pair")))]
         [(ifgreater? e)
          (let ([e1 (eval-under-env (ifgreater-e1 e) env)]
                [e2 (eval-under-env (ifgreater-e2 e) env)]
