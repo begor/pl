@@ -55,6 +55,10 @@
                        (int-num v2)))
                (error "MUPL addition applied to non-number")))]
         [(or (int? e) (closure? e) (aunit? e)) e]
+        [(apair? e)
+         (let ([e1 (eval-under-env (apair-e1 e) env)]
+               [e2 (eval-under-env (apair-e2 e) env)])
+           (apair e1 e2))]
         [(ifgreater? e)
          (let ([e1 (eval-under-env (ifgreater-e1 e) env)]
                [e2 (eval-under-env (ifgreater-e2 e) env)]
