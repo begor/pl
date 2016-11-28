@@ -28,7 +28,7 @@ class C
   end
 
   def m1 x
-    @foo += x   # Mutate @foo only for one concrete instace 
+    @foo += x   # Mutate @foo only for one concrete instace
     @@bar += 1  # Mutate @@bar across every instance of a class C
   end
 
@@ -39,3 +39,93 @@ class C
   def bar
     @@bar
   end
+
+end
+
+
+
+  # Rational example
+
+class MyRational
+
+  def initialize(num, den=1)
+    if den == 0
+      raise "MyRational zero denominator"
+    elsif den < 0
+      @num = - num
+      @den = - den
+    else
+      @num = num
+      @den = den
+    end
+    reduce # Can't call self.reduce, because it's private
+  end
+
+  def to_s
+    ans = @num.to_s
+    if @den != 1
+      ans += '/'
+      ans += @den.to_s
+    end
+    ans
+  end
+
+  def add! r  # Mutate self in place
+    a = r.num  # Works because of protected methods
+    b = r.den
+    c = @num
+    d = @den
+    @num = (a * d) + (b * c)
+    @den = b * d
+    reduce
+    self  # Allow for message chaining
+  end
+
+  def + r  # Functional, immutable addition; sytactic sugar: can write r1 + r2
+    ans = MyRational.new(@num, @den)  # Clone self
+    ans.add! r
+  end
+
+  protected
+  # Can also do it with attr_reader :num, :den
+  def num
+    @num
+  end
+
+  def den
+    @den
+  end
+
+  private
+
+  def gcd(x, y)
+    if x == y
+      x
+    elsif x < y
+      gcd(x, y-x)
+    else
+      gcd(y, x)
+    end
+  end
+
+  def reduce
+    if @num == 0
+      @den = 1
+    else
+      d = gcd(@num.abs, @den)
+      @num = @num / d
+      @den = @den / d
+    end
+  end
+end
+
+# top-level method (belongs to Object class)
+def use_rationals
+  r1 = MyRational.new(3, 4)
+  r2 = r1 + r1 + MyRational.new(-5, 2) # syntactic sugar for (r1.+(r1)).+(MyRational.new(...))
+  puts r2.to_s
+  (r2.add! r1).add! (MyRational.new(1, -4))
+  puts r2.to_s
+end
+
+use_rationals
