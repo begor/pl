@@ -128,4 +128,10 @@ def use_rationals
   puts r2.to_s
 end
 
-use_rationals
+
+# Dynamic classes
+class MyRational
+  def double  # Now available in every MyRational instance, even intanciated earlier
+    self + self
+  end
+end
