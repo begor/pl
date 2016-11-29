@@ -135,3 +135,28 @@ class MyRational
     self + self
   end
 end
+
+
+# Blocks
+
+class Foo
+  def initialize(max)
+    @max = max
+  end
+
+  def silly
+    yield(4, 5) + yield(@max, @max)
+  end
+
+  # Takes block.
+  # Counts how many times you should go from base to max until block yields true
+  def count base
+    if base > @max
+      raise "max reached"
+    elsif yield base  # If block returns true we are done
+      1
+    else
+      1 + (count(base+1) {|i| yield i})  # Recursively call WITH THE SAME BLOCK as given
+    end
+  end
+end
