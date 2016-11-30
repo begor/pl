@@ -160,3 +160,31 @@ class Foo
     end
   end
 end
+
+
+# Subclassing
+class Point
+  attr_accessor :x, :y  # defines methods x, y, x=, y=
+
+  def initialize(x, y)
+    @x = x
+    @y = y
+  end
+
+  def distanceFromOrigin
+    Math.sqrt(@x * @x + @y * @y)  # Uses intance variables
+  end
+
+  def distanceFromOrigin2
+    Math.sqrt(x * x + y * y)  # Uses getters, makes 4 calls
+  end
+end
+
+class ColorPoint < Point
+  attr_accessor :color  # color, color=
+
+  def initialize(x, y, color="clear")
+    super(x,y)
+    @color = color
+  end
+end
