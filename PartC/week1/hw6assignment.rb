@@ -9,7 +9,9 @@ class MyPiece < Piece
   end
 
   def self.next_piece (board)
-    MyPiece.new(All_My_Pieces.sample, board)
+    s = All_My_Pieces.sample
+    puts s.to_s
+    MyPiece.new(s, board)
   end
 
   def self.cheat_piece (board)
@@ -28,10 +30,10 @@ class MyPiece < Piece
                   rotations([[0, 0], [-1, 0], [0, -1], [1, -1]]), # S
                   rotations([[0, 0], [1, 0], [0, -1], [-1, -1]]),  # Z
                   # Added in 2:
-                  rotations([[0, 0], [0, 0], [0, 1], [1, 0]]),             # 1
-                  [[[0, 0], [-1, 0], [-2, 0], [1, 0], [2, 0]],             # 2
+                  rotations([[0, 0], [0, -1], [1, 0], [0, 0]]),
+                  [[[0, 0], [-1, 0], [-2, 0], [1, 0], [2, 0]],
                     [[0, 0], [0, -1], [0, -2], [0, 1], [0, 2]]],
-                  rotations([[0, 0], [-1, 0], [-1, -1], [1, 0], [0, -1]])] # 3
+                  rotations([[0, 0], [-1, 0], [-1, -1], [1, 0], [0, -1]])]
 end
 
 class MyBoard < Board
@@ -54,7 +56,7 @@ class MyBoard < Board
   end
 
   def cheat
-    if @score > 100
+    if @score >= 100 && !@cheat
       @cheat = true
       @score -= 100
     end
