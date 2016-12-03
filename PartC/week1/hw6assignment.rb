@@ -9,7 +9,7 @@ class MyPiece < Piece
   end
 
   def self.next_piece (board)
-    MyPiece.new(All My Pieces.sample, board)
+    MyPiece.new(All_My_Pieces.sample, board)
   end
 
   def self.cheat_piece (board)
@@ -19,7 +19,7 @@ class MyPiece < Piece
   # class array holding all the pieces and their rotations
   Cheat_piece = [[[0, 0],[0, 0],[0, 0],[0, 0]]]
 
-  All My Pieces = [[[[0, 0], [1, 0], [0, 1], [1, 1]]],  # square (only needs one)
+  All_My_Pieces = [[[[0, 0], [1, 0], [0, 1], [1, 1]]],  # square (only needs one)
                   rotations([[0, 0], [-1, 0], [1, 0], [0, -1]]), # T
                   [[[0, 0], [-1, 0], [1, 0], [2, 0]], # long (only needs two)
                     [[0, 0], [0, -1], [0, 1], [0, 2]]],
