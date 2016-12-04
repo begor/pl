@@ -9,9 +9,7 @@ class MyPiece < Piece
   end
 
   def self.next_piece (board)
-    s = All_My_Pieces.sample
-    puts s.to_s
-    MyPiece.new(s, board)
+    MyPiece.new(All_My_Pieces.sample, board)
   end
 
   def self.cheat_piece (board)
@@ -19,7 +17,7 @@ class MyPiece < Piece
   end
 
   # class array holding all the pieces and their rotations
-  Cheat_piece = [[[0, 0],[0, 0],[0, 0],[0, 0]]]
+  Cheat_piece = [[[0, 0]]]
 
   All_My_Pieces = [[[[0, 0], [1, 0], [0, 1], [1, 1]]],  # square (only needs one)
                   rotations([[0, 0], [-1, 0], [1, 0], [0, -1]]), # T
@@ -30,7 +28,7 @@ class MyPiece < Piece
                   rotations([[0, 0], [-1, 0], [0, -1], [1, -1]]), # S
                   rotations([[0, 0], [1, 0], [0, -1], [-1, -1]]),  # Z
                   # Added in 2:
-                  rotations([[0, 0], [0, -1], [1, 0], [0, 0]]),
+                  rotations([[0, 0], [0, -1], [1, 0]]),
                   [[[0, 0], [-1, 0], [-2, 0], [1, 0], [2, 0]],
                     [[0, 0], [0, -1], [0, -2], [0, 1], [0, 2]]],
                   rotations([[0, 0], [-1, 0], [-1, -1], [1, 0], [0, -1]])]
@@ -44,7 +42,6 @@ class MyBoard < Board
   end
 
   def next_piece
-    puts @cheat
     @current_block = @cheat ? MyPiece.cheat_piece(self) : MyPiece.next_piece(self)
     @cheat = false
     @current_pos = nil
@@ -60,6 +57,21 @@ class MyBoard < Board
       @cheat = true
       @score -= 100
     end
+  end
+
+  # gets the information from the current piece about where it is and uses this
+  # to store the piece on the board itself.  Then calls remove_filled.
+  def store_current
+    locations = @current_block.current_rotation
+    displacement = @current_block.position
+    block_range = 0..(locations.length - 1) # Since we now have other blocks
+    block_range.each{|index|
+      current = locations[index];
+      @grid[current[1]+displacement[1]][current[0]+displacement[0]] =
+      @current_pos[index]
+    }
+    remove_filled
+    @delay = [@delay - 2, 80].max
   end
 end
 
