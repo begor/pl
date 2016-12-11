@@ -31,6 +31,10 @@ class GeometryValue
   # do *not* change methods in this class definition
   # you can add methods if you wish
 
+  def preprocess_prog
+    self # no pre-processing to do here, sane default for Values
+  end
+
   private
   # some helper methods that may be generally useful
   def real_close(r1,r2)
@@ -76,9 +80,6 @@ class NoPoints < GeometryValue
   # Note: no initialize method only because there is nothing it needs to do
   def eval_prog env
     self # all values evaluate to self
-  end
-  def preprocess_prog
-    self # no pre-processing to do here
   end
   def shift(dx,dy)
     self # shifting no-points is no-points
@@ -142,6 +143,17 @@ class LineSegment < GeometryValue
   # Note: This is the most difficult class.  In the sample solution,
   #  preprocess_prog is about 15 lines long and
   # intersectWithSegmentAsLineResult is about 40 lines long
+
+  def preprocess_prog
+    if real_close_point(x1, y1, x2, y2)
+      Point.new(x1, y1)
+    elsif x2 > x1 || (real_close(x1, x2) && y1 > y2)
+      LineSegment.new(x2, y2, x1, y1)
+    else
+      self
+    end
+  end
+
   attr_reader :x1, :y1, :x2, :y2
   def initialize (x1,y1,x2,y2)
     @x1 = x1
@@ -156,6 +168,12 @@ end
 class Intersect < GeometryExpression
   # *add* methods to this class -- do *not* change given code and do not
   # override any methods
+  attr_reader :e1, :e2
+
+  def preprocess_prog
+    Intersect.new(e1.preprocess_prog, e2.preprocess_prog)
+  end
+
   def initialize(e1,e2)
     @e1 = e1
     @e2 = e2
@@ -189,9 +207,15 @@ end
 class Shift < GeometryExpression
   # *add* methods to this class -- do *not* change given code and do not
   # override any methods
+  attr_reader :e, :dx, :dy
+
   def initialize(dx,dy,e)
     @dx = dx
     @dy = dy
     @e = e
+  end
+
+  def preprocess_prog
+    Shift(dx, dy, e.preprocess_prog)
   end
 end
