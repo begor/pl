@@ -94,28 +94,28 @@ fun intersect (v1,v2) =
       	if real_close(x1,x2)
       	then v1 (* same line *)
       	else NoPoints (* parallel *)
-        
+
       | (VerticalLine _, LineSegment seg) => intersect(v2,v1)
 
       | (LineSegment seg, _) =>
-	(* the hard case, actually 4 cases because v2 could be a point,
-	   line, vertical line, or line segment *)
-	(* First compute the intersection of (1) the line containing the segment
-           and (2) v2. Then use that result to compute what we need. *)
-	(case intersect(two_points_to_line seg, v2) of
-	    NoPoints => NoPoints
-	  | Point(x0,y0) => (* see if the point is within the segment bounds *)
-	    (* assumes v1 was properly preprocessed *)
-	    let
-		fun inbetween(v,end1,end2) =
-		    (end1 - epsilon <= v andalso v <= end2 + epsilon)
-		    orelse (end2 - epsilon <= v andalso v <= end1 + epsilon)
-		val (x1,y1,x2,y2) = seg
-	    in
-		if inbetween(x0,x1,x2) andalso inbetween(y0,y1,y2)
-		then Point(x0,y0)
-		else NoPoints
-	    end
+      	(* the hard case, actually 4 cases because v2 could be a point,
+      	   line, vertical line, or line segment *)
+      	(* First compute the intersection of (1) the line containing the segment
+                 and (2) v2. Then use that result to compute what we need. *)
+      	(case intersect(two_points_to_line seg, v2) of
+      	    NoPoints => NoPoints
+      	  | Point(x0,y0) => (* see if the point is within the segment bounds *)
+      	    (* assumes v1 was properly preprocessed *)
+      	    let
+      		fun inbetween(v,end1,end2) =
+      		    (end1 - epsilon <= v andalso v <= end2 + epsilon)
+      		    orelse (end2 - epsilon <= v andalso v <= end1 + epsilon)
+      		val (x1,y1,x2,y2) = seg
+      	    in
+      		if inbetween(x0,x1,x2) andalso inbetween(y0,y1,y2)
+      		then Point(x0,y0)
+      		else NoPoints
+      	    end
 	  | Line _ => v1 (* so segment seg is on line v2 *)
 	  | VerticalLine _ => v1 (* so segment seg is on vertical-line v2 *)
 	  | LineSegment seg2 =>
@@ -191,9 +191,10 @@ fun eval_prog (e,env) =
       | Shift(dx, dy, e) => case eval_prog(e, env) of
                             NoPoints => NoPoints
                             | Point(x, y) => Point(x + dx, y + dy)
-                            | Line(m, b) => Line(m, b + dx - m * dy)
+                            | Line(m, b) => Line(m, b + dy - m * dx)
                             | VerticalLine x => VerticalLine(x + dx)
                             | LineSegment(x1, y1, x2, y2) => LineSegment(x1 + dx, y1 + dy, x2 + dx, y2 + dy)
+                            | _ => raise Impossible("Can't shift expression!")
 
 (* CHANGE: Add function preprocess_prog of type geom_exp -> geom_exp *)
 fun preprocess_prog e =
@@ -206,4 +207,5 @@ fun preprocess_prog e =
       else e
     | Intersect(e1, e2) => Intersect(preprocess_prog(e1), preprocess_prog(e2))
     | Shift(x, y, e) => Shift(x, y, preprocess_prog(e))
+    | Let(s, e1, e2) => Let(s, preprocess_prog(e1), preprocess_prog(e2))
     | _ => e
