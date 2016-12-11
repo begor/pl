@@ -71,17 +71,17 @@ fun intersect (v1,v2) =
       | (Line _, Point _) => intersect(v2,v1)
 
       | (Line (m1,b1), Line (m2,b2)) =>
-	if real_close(m1,m2)
-	then (if real_close(b1,b2)
-	      then v1 (* same line *)
-	      else  NoPoints) (* parallel lines do not intersect *)
-	else
-	    let (* one-point intersection *)
-		val x = (b2 - b1) / (m1 - m2)
-		val y = m1 * x + b1
-	    in
-		Point (x,y)
-	    end
+      	if real_close(m1,m2)
+      	then (if real_close(b1,b2)
+      	      then v1 (* same line *)
+      	      else  NoPoints) (* parallel lines do not intersect *)
+      	else
+    	    let (* one-point intersection *)
+        		val x = (b2 - b1) / (m1 - m2)
+        		val y = m1 * x + b1
+    	    in
+      		  Point (x,y)
+    	    end
 
       | (Line (m1,b1), VerticalLine x2) => Point(x2, m1 * x2 + b1)
 
@@ -91,10 +91,10 @@ fun intersect (v1,v2) =
       | (VerticalLine _, Line _)  => intersect(v2,v1)
 
       | (VerticalLine x1, VerticalLine x2) =>
-	if real_close(x1,x2)
-	then v1 (* same line *)
-	else NoPoints (* parallel *)
-
+      	if real_close(x1,x2)
+      	then v1 (* same line *)
+      	else NoPoints (* parallel *)
+        
       | (VerticalLine _, LineSegment seg) => intersect(v2,v1)
 
       | (LineSegment seg, _) =>

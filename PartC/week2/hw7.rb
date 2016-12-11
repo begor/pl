@@ -121,6 +121,34 @@ class Point < GeometryValue
   def shift(dx,dy)
     Point.new(x + dx, y + dy)
   end
+
+  def intersect other
+    other.intersectPoint self
+  end
+
+  def intersectPoint point
+    if real_close_point(x, y, point.x, point.y)
+      self
+    else
+      NoPoints.new
+    end
+  end
+
+  def intersectLine line
+    if real_close(y, line.m * x + line.b)
+      self
+    else
+      NoPoints.new
+    end
+  end
+
+  def intersectVerticalLine vline
+    if real_close(x, vline.x)
+      self
+    else
+      NoPoints.new
+    end
+  end
 end
 
 class Line < GeometryValue
@@ -135,6 +163,31 @@ class Line < GeometryValue
   def shift(dx,dy)
     Line.new(m, b + dx - m * dy)
   end
+
+  def intersect other
+    other.intersectLine self
+  end
+
+  def intersectPoint point
+    point.intersectLine self
+  end
+
+  def intersectLine line
+    if real_close(m, line.m)
+      if real_close(b, line.b)
+        self
+      else
+        NoPoints.new
+      end
+    else
+      x = (line.b - b) / (m - line.m)
+      y = m * x + b
+      Point.new(x, y)
+  end
+
+  def intersectVerticalLine vline
+    Point(vline.x, m * vline.x + b)
+  end
 end
 
 class VerticalLine < GeometryValue
@@ -147,6 +200,22 @@ class VerticalLine < GeometryValue
 
   def shift(dx,dy)
     VerticalLine.new(x + dx)
+  end
+
+  def intersect other
+    other.intersectVerticalLine self
+  end
+
+  def intersectPoint point
+    point.intersectVerticalLine self
+  end
+
+  def intersectLine line
+    line.intersectVerticalLine self
+  end
+
+  def intersectVerticalLine vline
+    real_close(x, vline.x) ? self : NoPoints.new
   end
 end
 
@@ -178,6 +247,10 @@ class LineSegment < GeometryValue
   def shift(dx, dy)
     LineSegment.new(x1 + dx, y1 + dy, x2 + dx, y2 + dy)
   end
+
+  def intersect other
+    other.intersectLineSegment self
+  end
 end
 
 # Note: there is no need for getter methods for the non-value classes
@@ -189,6 +262,13 @@ class Intersect < GeometryExpression
   def initialize(e1,e2)
     @e1 = e1
     @e2 = e2
+  end
+
+  def eval_prog env
+    e1 = @e1.eval_prog(env)
+    e2 = @e2.eval_prog(env)
+
+    e1.intersect(e2)
   end
 
   def preprocess_prog
