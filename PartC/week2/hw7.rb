@@ -35,6 +35,10 @@ class GeometryValue
     self # no pre-processing to do here, sane default for Values
   end
 
+  def eval_prog
+    self
+  end
+
   private
   # some helper methods that may be generally useful
   def real_close(r1,r2)
@@ -78,9 +82,6 @@ class NoPoints < GeometryValue
   # However, you *may* move methods from here to a superclass if you wish to
 
   # Note: no initialize method only because there is nothing it needs to do
-  def eval_prog env
-    self # all values evaluate to self
-  end
   def shift(dx,dy)
     self # shifting no-points is no-points
   end
@@ -116,6 +117,10 @@ class Point < GeometryValue
     @x = x
     @y = y
   end
+
+  def shift(dx,dy)
+    Point.new(x + dx, y + dy)
+  end
 end
 
 class Line < GeometryValue
@@ -126,6 +131,10 @@ class Line < GeometryValue
     @m = m
     @b = b
   end
+
+  def shift(dx,dy)
+    Line.new(m, b + dx - m * dy)
+  end
 end
 
 class VerticalLine < GeometryValue
@@ -135,6 +144,10 @@ class VerticalLine < GeometryValue
   def initialize x
     @x = x
   end
+
+  def shift(dx,dy)
+    VerticalLine.new(x + dx)
+  end
 end
 
 class LineSegment < GeometryValue
@@ -143,6 +156,14 @@ class LineSegment < GeometryValue
   # Note: This is the most difficult class.  In the sample solution,
   #  preprocess_prog is about 15 lines long and
   # intersectWithSegmentAsLineResult is about 40 lines long
+
+  attr_reader :x1, :y1, :x2, :y2
+  def initialize (x1,y1,x2,y2)
+    @x1 = x1
+    @y1 = y1
+    @x2 = x2
+    @y2 = y2
+  end
 
   def preprocess_prog
     if real_close_point(x1, y1, x2, y2)
@@ -154,12 +175,8 @@ class LineSegment < GeometryValue
     end
   end
 
-  attr_reader :x1, :y1, :x2, :y2
-  def initialize (x1,y1,x2,y2)
-    @x1 = x1
-    @y1 = y1
-    @x2 = x2
-    @y2 = y2
+  def shift(dx, dy)
+    LineSegment.new(x1 + dx, y1 + dy, x2 + dx, y2 + dy)
   end
 end
 
@@ -168,15 +185,14 @@ end
 class Intersect < GeometryExpression
   # *add* methods to this class -- do *not* change given code and do not
   # override any methods
-  attr_reader :e1, :e2
-
-  def preprocess_prog
-    Intersect.new(e1.preprocess_prog, e2.preprocess_prog)
-  end
 
   def initialize(e1,e2)
     @e1 = e1
     @e2 = e2
+  end
+
+  def preprocess_prog
+    Intersect.new(@e1.preprocess_prog, @e2.preprocess_prog)
   end
 end
 
@@ -188,6 +204,10 @@ class Let < GeometryExpression
     @s = s
     @e1 = e1
     @e2 = e2
+  end
+  def eval_prog env
+    pr = env.push([s, e1])
+    @e2.eval_prog pr
   end
 end
 
@@ -207,7 +227,6 @@ end
 class Shift < GeometryExpression
   # *add* methods to this class -- do *not* change given code and do not
   # override any methods
-  attr_reader :e, :dx, :dy
 
   def initialize(dx,dy,e)
     @dx = dx
@@ -215,7 +234,11 @@ class Shift < GeometryExpression
     @e = e
   end
 
+  def eval_prog env
+    @e.shift(@dx, @dy)
+  end
+
   def preprocess_prog
-    Shift(dx, dy, e.preprocess_prog)
+    Shift.new(@dx, @dy, @e.preprocess_prog)
   end
 end
